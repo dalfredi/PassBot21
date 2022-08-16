@@ -31,7 +31,14 @@ public class PassBot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String message_text = update.getMessage().getText();
             Long chat_id = update.getMessage().getChatId();
-            sendMessage(chat_id, message_text);
+            switch(message_text) {
+                case "/start":
+                    sendMessage(chat_id, "Write your name");
+                    break ;
+                default:
+                    sendMessage(chat_id, "Sorry!");
+            }
+//            sendMessage(chat_id, message_text);
         }
     }
 
