@@ -1,18 +1,22 @@
 package edu.school21.bots.passbot.kernel;
 
 import edu.school21.bots.passbot.config.BotConfig;
-import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.apache.shiro.session.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.session.TelegramLongPollingSessionBot;
 
-@Component
-public class PassBot extends TelegramLongPollingBot {
+import javax.annotation.PostConstruct;
+import java.util.Optional;
 
+public class SessionPassBot extends TelegramLongPollingSessionBot {
+    private static final Logger logger = LoggerFactory.getLogger(SessionPassBot.class);
     BotConfig config;
 
-    public PassBot(BotConfig config) {
+    public SessionPassBot(BotConfig config) {
         this.config = config;
     }
 
@@ -27,11 +31,16 @@ public class PassBot extends TelegramLongPollingBot {
     }
 
     @Override
-    public void onUpdateReceived(Update update) {
+    public void onUpdateReceived(Update update, Optional<Session> optional) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String message_text = update.getMessage().getText();
             Long chat_id = update.getMessage().getChatId();
             sendMessage(chat_id, message_text);
+            if (!optional.isPresent())
+                return;
+            Session session = optional.get();
+            sendMessage(chat_id, "Your session id: " + session.getId().toString());
+            sendMessage(chat_id, "Your host: " + session.getHost());
         }
     }
 
@@ -41,8 +50,16 @@ public class PassBot extends TelegramLongPollingBot {
         sendMessage.setText(text);
         try {
             execute(sendMessage);
+            logger.info("Sent message \"{}\" to {}", text, chatId);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            logger.error("Failed to send message \"{}\" to {} due to error: {}", text, chatId, e.getMessage());
         }
     }
+
+    @PostConstruct
+    public void start() {
+        logger.info("username: {}, token: {}", config.getName(), config.getToken());
+    }
 }
+
+
