@@ -12,7 +12,6 @@ CREATE TABLE IF NOT EXISTS passbot.users (
 
 CREATE TABLE IF NOT EXISTS passbot.orders (
                         order_id     INT GENERATED ALWAYS AS IDENTITY,
---                         user_id      INT,
                         number       integer,
                         status       text,
                         start_time   timestamp without time zone,
