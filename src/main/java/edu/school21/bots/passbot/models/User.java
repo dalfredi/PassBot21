@@ -3,10 +3,9 @@ package edu.school21.bots.passbot.models;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Data
 @ToString
@@ -21,5 +20,8 @@ public class User {
     private String surname;
     private String patronymic;
     private String role;
+    @ToString.Exclude
+    @OneToMany(mappedBy = "orders", fetch = FetchType.EAGER)
+    private List<Order> orders;
 }
 
