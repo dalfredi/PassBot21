@@ -13,7 +13,8 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue
-    private Long user_id;
+    @Column(name = "user_id")
+    private Long userId;
     private String name;
     private String surname;
     private String patronymic;

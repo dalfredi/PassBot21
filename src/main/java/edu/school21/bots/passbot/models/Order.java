@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 public class Order {
     @Id
     @GeneratedValue
-    private Long order_id;
+    @Column(name = "order_id")
+    private Long orderId;
     private String number;
     private String status;
     private LocalDateTime startTime;
