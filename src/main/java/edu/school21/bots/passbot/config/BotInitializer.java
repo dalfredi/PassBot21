@@ -1,6 +1,6 @@
 package edu.school21.bots.passbot.config;
 
-import edu.school21.bots.passbot.kernel.SessionPassBot;
+import edu.school21.bots.passbot.kernel.PassBot;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -19,6 +19,6 @@ public class BotInitializer {
     @EventListener(ContextRefreshedEvent.class)
     public void init() throws TelegramApiException {
         TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-        botsApi.registerBot(new SessionPassBot(config));
+        botsApi.registerBot(new PassBot(config));
     }
 }
