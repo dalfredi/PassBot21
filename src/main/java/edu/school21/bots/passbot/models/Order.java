@@ -1,23 +1,22 @@
 package edu.school21.bots.passbot.models;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Data
-@ToString
-@EqualsAndHashCode
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long order_id;
+    private String number;
     private String status;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private Long duration;
     @ManyToOne(cascade = CascadeType.ALL)
     @Column(name = "peer_id")
     @MapsId
