@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c6ade759-3b3b-4ee7-af76-c1fa26944c9c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/Weeklython.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CHANGELOG" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/code-samples/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-samples/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datasets/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/materials/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/materials/tickets/ticket_42_1001.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/materials/tickets/ticket_42_1002.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/materials/tickets/ticket_42_1003.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/materials/tickets/ticket_42_1004.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/misc/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/misc/images/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/misc/images/Prototype.PNG" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/project/api.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/project/components.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/project/db.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/project/erd.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/project/idef0.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/project/idef0/idef0-A-0.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/project/idef0/idef0-A-1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/project/methods.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/project/plan.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/project/solutions.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/project/team.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/project/technologies.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/project/usecase.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/project/subject.md" beforeDir="false" afterPath="$PROJECT_DIR$/src/project/subject.md" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2DRepEt3dcTg6xg0Et1dz2qynxp" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ]
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c6ade759-3b3b-4ee7-af76-c1fa26944c9c" name="Changes" comment="" />
+      <created>1660664725934</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1660664725934</updated>
+      <workItem from="1660664752041" duration="452000" />
+      <workItem from="1660666570526" duration="2060000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

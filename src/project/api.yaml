@@ -1,0 +1,312 @@
+info:
+  title: "My PASSBOT API"
+  description: "АPI для телеграмм-бота по заказу пропусков"
+  version: "1.1"
+  termsOfService: "https://terms"
+  contact:
+    name: "PassBotTeam"
+    url: "https://api"
+    email: "hemelia@student.21-school.ru"
+servers:
+  - url: https://api/
+      description: Production
+paths:
+  /order/create:
+    post:
+      tags:
+        - order
+      summary: Add a new order to DB
+      description: Add a new order to DB
+      operationId: addOrder
+      requestBody:
+        description: Create a new order in DB
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '405':
+          description: Invalid input
+  /order/{studentNickname}:
+    get:
+      tags:
+        - order
+      summary: Finds Orders by student's nickname
+      description: Returns an array of Orders
+      operationId: getOrdersByStudentsNickname
+      parameters:
+        - name: nickname
+          in: path
+          description: Nickname of student whose order e return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '400':
+          description: Invalid nickname supplied
+  /order/{orderId}:
+    put:
+      tags:
+        - order
+      summary: Update an existing order
+      description: Update an existing order with form data
+      operationId: updateOrder
+      parameters:
+        - name: orderId
+          in: path
+          description: ID of order that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: orderDate
+          in: query
+          description: Date that needs to be updated
+          schema:
+            type: date
+        - name: guestName
+          in: query
+          description: Guest Name of order that needs to be updated
+          schema:
+            type: string
+        - name: campus
+          in: query
+          description: campus of order that needs to be updated
+        schema:
+          type: string
+      responses:
+        '405':
+          description: Invalid input
+    delete:
+      tags:
+        - order
+      summary: Deletes an order
+      description: delete an order
+      operationId: deleteOrder
+      parameters:
+        - name: orderId
+          in: path
+          description: Order id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid pet value
+  /admin/order/{orderId}:
+    put:
+      tags:
+        - order
+      summary: Update status for an existing order by admin
+      description: Update status for an existing order with form data
+      operationId: updateOrderStatus
+      parameters:
+        - name: orderId
+          in: path
+          description: ID of order which status needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: status
+          in: query
+          description: Status of order with orderId that needs to be updated
+          schema:
+            type: status
+      responses:
+        '405':
+          description: Invalid input
+  /admin/order/findByStatus:
+    get:
+      tags:
+        - order
+      summary: Finds Orders by status
+      description: Multiple status values can be provided with comma separated strings
+      operationId: findOrdersByStatus
+      parameters:
+        - name: status
+          in: query
+          description: Status values that need to be considered for filter
+          required: false
+          explode: true
+          schema:
+            type: string
+            default: active
+            enum:
+              - active
+              - approved
+              - declined
+              - used
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '400':
+          description: Invalid status value
+  /guard/order/{orderId}:
+    put:
+      tags:
+        - order
+      summary: Update status for an existing order by guard
+      description: Update status for an existing order with form data
+      operationId: updateOrderStatus
+      parameters:
+        - name: orderId
+          in: path
+          description: ID of order which status needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: status
+          in: query
+          description: Status of order with orderId that needs to be updated
+          schema:
+            type: status
+      responses:
+        '405':
+          description: Invalid input
+  /guard/order/findApprovedOrders/{date}:
+    get:
+      tags:
+        - order
+      summary: Finds Approved orders for today
+      description: Finds Approved orders for today
+      operationId: findApprovedOrders
+      parameters:
+        - name: date
+          in: path
+          description: date of orders to find
+          required: true
+        - name: status
+          in: query
+          description: Approved orders for {date}
+          required: false
+          explode: true
+          schema:
+            type: string
+            default: approved
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '400':
+          description: Invalid status value
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        orderId:
+          type: integer
+          format: int64
+          example: 10
+        number:
+          type: integer
+          format: int64
+          example: 7
+        status:
+          type: string
+          description: Order Status
+          example: approved
+          enum:
+            - active
+            - approved
+            - declined
+            - used
+        date:
+          type: string
+          format: date
+        startDateTime:
+          type: string
+          format: date-time
+        endDateTime:
+          type: string
+          format: date-time
+        duration:
+          type: integer
+          format: int32
+          example: 24
+        peerId:
+          type: integer
+          format: int64
+          example: 10
+        adminId:
+          type: integer
+          format: int64
+          example: 10
+        guestId:
+          type: integer
+          format: int64
+          example: 10
+        campus:
+          type: string
+          description: campus name
+          example: Moscow
+          enum:
+            - Moscow
+            - Kazan
+            - Novosibirsk
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 100000
+        username:
+          type: string
+          example: Emilia
+        userSurname:
+          type: string
+          example: Howland
+        userPatronimic:
+          type: string
+          example: Alekseevna
+        campus:
+          type: string
+          description: campus name
+          example: Moscow
+          enum:
+            - Moscow
+            - Kazan
+            - Novosibirsk
+            - notChosen
+        occupation:
+          type: string
+          example: community manager
+        role:
+          type: string
+          description: role
+          example: student
+          enum:
+            - student
+            - guest
+            - admin
+            - guard
