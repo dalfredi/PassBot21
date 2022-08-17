@@ -1,4 +1,4 @@
-package edu.school21.bots.passbot.config;
+package edu.school21.bots.passbot.gateway.config;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;

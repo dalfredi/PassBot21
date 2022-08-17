@@ -1,8 +1,8 @@
-package edu.school21.bots.passbot.kernel;
+package edu.school21.bots.passbot.gateway.bot;
 
-import edu.school21.bots.passbot.config.BotConfig;
-import edu.school21.bots.passbot.kernel.commands.Command;
-import edu.school21.bots.passbot.kernel.commands.Commands;
+import edu.school21.bots.passbot.gateway.config.BotConfig;
+import edu.school21.bots.passbot.basicui.commands.Command;
+import edu.school21.bots.passbot.basicui.commands.Commands;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ import java.util.Optional;
 
 public class PassBot extends TelegramLongPollingSessionBot {
     private static final Logger logger = LoggerFactory.getLogger(PassBot.class);
-    BotConfig config;
+    private final BotConfig config;
     private final Commands commands;
 
     public PassBot(BotConfig config) {
