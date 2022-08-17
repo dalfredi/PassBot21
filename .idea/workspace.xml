@@ -5,10 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6ade759-3b3b-4ee7-af76-c1fa26944c9c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/edu/school21/bots/passbot/kernel/AbilityPassBot.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/edu/school21/bots/passbot/kernel/SessionPassBot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/Weeklython.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Weeklython.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/school21/bots/passbot/kernel/PassBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/school21/bots/passbot/kernel/PassBot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/school21/bots/passbot/PassBotApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/school21/bots/passbot/PassBotApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/school21/bots/passbot/config/BotConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/school21/bots/passbot/config/BotConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/school21/bots/passbot/config/BotInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/school21/bots/passbot/config/BotInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/school21/bots/passbot/kernel/PassBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/school21/bots/passbot/kernel/ClassicPassBot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/edu/school21/bots/passbot/PassBotApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/edu/school21/bots/passbot/ClassicPassBotApplicationTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +50,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.repository.indices" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -68,7 +76,8 @@
       <option name="presentableId" value="Default" />
       <updated>1660587114171</updated>
       <workItem from="1660587116376" duration="7102000" />
-      <workItem from="1660647086232" duration="2325000" />
+      <workItem from="1660647086232" duration="28032000" />
+      <workItem from="1660759270764" duration="9227000" />
     </task>
     <servers />
   </component>

@@ -12,4 +12,10 @@ public class BotConfig {
 
     @Value("${bot.token}")
     String token;
+
+    @Value("${user.oauth.clientId}")
+    String credentialId;
+
+    @Value("${user.oauth.clientSecret}")
+    String credentialSecret;
 }

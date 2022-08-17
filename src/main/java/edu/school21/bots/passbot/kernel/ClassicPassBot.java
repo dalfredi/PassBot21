@@ -1,6 +1,8 @@
 package edu.school21.bots.passbot.kernel;
 
 import edu.school21.bots.passbot.config.BotConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -8,11 +10,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Component
-public class PassBot extends TelegramLongPollingBot {
+public class ClassicPassBot extends TelegramLongPollingBot {
 
+    private static final Logger logger = LoggerFactory.getLogger(ClassicPassBot.class);
     BotConfig config;
 
-    public PassBot(BotConfig config) {
+    public ClassicPassBot(BotConfig config) {
         this.config = config;
     }
 
@@ -34,6 +37,8 @@ public class PassBot extends TelegramLongPollingBot {
             switch(message_text) {
                 case "/start":
                     sendMessage(chat_id, "Write your name");
+//                    sendMessage(chat_id, );
+                    sendMessage(chat_id, "Write your name");
                     break ;
                 default:
                     sendMessage(chat_id, "Sorry!");
@@ -48,8 +53,9 @@ public class PassBot extends TelegramLongPollingBot {
         sendMessage.setText(text);
         try {
             execute(sendMessage);
+            logger.info("Sent message \"{}\" to {}", text, chatId);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            logger.error("Failed to send message \"{}\" to {} due to error: {}", text, chatId, e.getMessage());
         }
     }
 }
