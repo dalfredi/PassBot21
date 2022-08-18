@@ -1,16 +1,26 @@
 package edu.school21.bots.passbot.basicui.commands;
 
+import edu.school21.bots.passbot.basicui.commands.meta.SimpleCommand;
+import edu.school21.bots.passbot.basicui.commands.meta.Commands;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-public class ShowHelpCommand extends Command {
+@Component
+public class ShowHelpCommand implements SimpleCommand {
+    @Getter
+    private final String name = "/help";
+    @Setter
+    @Getter
+    Long chatId;
 
-    public ShowHelpCommand(Long chatId) {
-        super(chatId);
-    }
+    public ShowHelpCommand() {}
+
     @Override
     public SendMessage execute() {
         SendMessage response = new SendMessage();
-        response.setChatId(super.getChatId());
+        response.setChatId(chatId);
         response.setText(Commands.HELP_TEXT);
         return response;
     }

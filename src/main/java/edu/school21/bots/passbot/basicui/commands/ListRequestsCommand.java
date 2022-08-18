@@ -1,34 +1,30 @@
 package edu.school21.bots.passbot.basicui.commands;
 
+import edu.school21.bots.passbot.basicui.commands.meta.SimpleCommand;
+import edu.school21.bots.passbot.kernel.service.UserService;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ListRequestsCommand extends Command {
-    public ListRequestsCommand(Long chatId) {
-        super(chatId);
+@Component
+public class ListRequestsCommand implements SimpleCommand {
+    @Getter
+    private final String name = "/list";
+    @Setter
+    @Getter
+    Long chatId;
+    private final UserService userService;
+    public ListRequestsCommand(UserService userService) {
+        this.userService = userService;
     }
 
+//    !TODO list only active
     @Override
     public SendMessage execute() {
         SendMessage response = new SendMessage();
-        // Запросить из бд все заявки и выслать карточки
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
-        List<InlineKeyboardButton> row = new ArrayList<>();
-        InlineKeyboardButton button = new InlineKeyboardButton();
-        button.setText("Кнопочка");
-        button.setUrl("/edit");
-        row.add(button);
-        rows.add(row);
-        inlineKeyboardMarkup.setKeyboard(rows);
-
-        response.setChatId(super.getChatId());
-        response.setReplyMarkup(inlineKeyboardMarkup);
-        response.setText("Список всех заявок");
+        response.setChatId(chatId);
+        response.setText("Здесь должен быть список заявок");
         return response;
     }
 }
