@@ -4,6 +4,7 @@ import edu.school21.bots.passbot.basicui.commands.meta.CommandWithArguments;
 import edu.school21.bots.passbot.kernel.service.UserService;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
+@Scope("prototype")
 @Setter
 @Getter
 public class RegisterCommand implements CommandWithArguments {

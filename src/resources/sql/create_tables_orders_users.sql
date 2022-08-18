@@ -9,6 +9,8 @@ create table if not exists bot.users (
                         user_id      serial primary key,
                         chat_id      bigint,
                         login        text,
+                        email        text,
+                        campus       text,
                         name         text,
                         surname      text,
                         patronymic   text,

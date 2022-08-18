@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public interface CommandWithArguments extends SimpleCommand {
+public interface CommandWithArguments extends Command {
 
     default void init() {
         setCurrentStep(0);

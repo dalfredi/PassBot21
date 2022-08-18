@@ -2,7 +2,7 @@ package edu.school21.bots.passbot.basicui.commands.meta;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-public interface SimpleCommand {
+public interface Command {
     String getName();
     void setChatId(Long id);
     Long getChatId();

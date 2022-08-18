@@ -1,46 +1,32 @@
 package edu.school21.bots.passbot.gateway.bot;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.school21.bots.passbot.basicui.commands.meta.SimpleCommand;
-import edu.school21.bots.passbot.basicui.commands.meta.Commands;
-import edu.school21.bots.passbot.dal.models.User;
+import edu.school21.bots.passbot.basicui.commands.meta.Command;
+import edu.school21.bots.passbot.basicui.commands.meta.CommandsFactory;
 import edu.school21.bots.passbot.gateway.config.BotConfig;
-import edu.school21.bots.passbot.kernel.service.UserService;
-import lombok.SneakyThrows;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-//import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.session.TelegramLongPollingSessionBot;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Optional;
 
 @Component
 public class PassBot extends TelegramLongPollingSessionBot {
     private static final Logger logger = LoggerFactory.getLogger(PassBot.class);
     private final BotConfig config;
-//    private UserService userService;
-    public PassBot(BotConfig config) {
+    private final CommandsFactory commandsFactory;
+    public PassBot(BotConfig config, CommandsFactory commandsFactory) {
         this.config = config;
-//        this.userService = us;
+        this.commandsFactory = commandsFactory;
     }
 
-    @SneakyThrows
     @Override
     public void onUpdateReceived(Update update, Optional<Session> optional) {
         if (!optional.isPresent())
@@ -50,8 +36,6 @@ public class PassBot extends TelegramLongPollingSessionBot {
         SendMessage response = null;
         if (update.hasMessage() && update.getMessage().hasText()) {
             Message message = update.getMessage();
-//            User user = requestAccessToken(message.getChatId(), message.getText());
-//            userService.saveUser(user);
             response = manageMessage(message, session);
         }
         if (update.hasCallbackQuery()) {
@@ -68,11 +52,11 @@ public class PassBot extends TelegramLongPollingSessionBot {
     }
 
     private SendMessage manageMessage(Message message, Session session) {
-        SimpleCommand command = (SimpleCommand) session.getAttribute("command");
+        Command command = (Command) session.getAttribute("command");
         SendMessage response;
 
         if (command == null) {
-            command = Commands.getCommandByName(message.getChatId(), message.getText());
+            command = commandsFactory.getCommandByName(message.getChatId(), message.getText());
             command.init();
             session.setAttribute("command", command);
         }

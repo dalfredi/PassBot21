@@ -1,14 +1,16 @@
 package edu.school21.bots.passbot.basicui.commands;
 
-import edu.school21.bots.passbot.basicui.commands.meta.SimpleCommand;
+import edu.school21.bots.passbot.basicui.commands.meta.Command;
 import edu.school21.bots.passbot.kernel.service.UserService;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @Component
-public class ListRequestsCommand implements SimpleCommand {
+@Scope("prototype")
+public class ListRequestsCommand implements Command {
     @Getter
     private final String name = "/list";
     @Setter
