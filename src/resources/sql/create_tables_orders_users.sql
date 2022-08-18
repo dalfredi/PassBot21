@@ -1,33 +1,27 @@
-create schema if not exists passbot;
-DROP TABLE IF EXISTS passbot.users ;
-DROP TABLE IF EXISTS passbot.orders;
-CREATE TABLE IF NOT EXISTS passbot.users (
-                        user_id      INT GENERATED ALWAYS AS IDENTITY,
-                        name         text not null,
+drop schema if exists bot cascade;
+create schema if not exists bot;
+
+drop table if exists bot.users cascade;
+drop table if exists bot.orders cascade;
+drop table if exists bot.telegram_users cascade;
+
+create table if not exists bot.users (
+                        user_id      serial primary key,
+                        chat_id      bigint,
+                        login        text,
+                        name         text,
                         surname      text,
                         patronymic   text,
-                        role         text,
-                        PRIMARY KEY(user_id)
+                        role         text
 );
 
-CREATE TABLE IF NOT EXISTS passbot.orders (
-                        order_id     INT GENERATED ALWAYS AS IDENTITY,
-                        number       integer,
+create table if not exists bot.orders (
+                        order_id     serial primary key,
                         status       text,
-                        start_time   timestamp without time zone,
-                        end_time     timestamp without time zone,
+                        start_time   timestamp,
+                        end_time     timestamp,
                         duration     integer,
-                        peer_id      INT,
-                        guest_id     INT,
-                        admin_id     INT,
-                        PRIMARY KEY(order_id),
-                        CONSTRAINT fk_peer
-                            FOREIGN KEY (peer_id)
-                                REFERENCES passbot.users(user_id),
-                        CONSTRAINT fk_guest
-                            FOREIGN KEY (guest_id)
-                                REFERENCES passbot.users(user_id),
-                        CONSTRAINT fk_admin
-                            FOREIGN KEY (admin_id)
-                                REFERENCES passbot.users(user_id)
+                        peer_id      integer references bot.users(user_id),
+                        guest_id     integer references bot.users(user_id),
+                        admin_id     integer references bot.users(user_id)
 );

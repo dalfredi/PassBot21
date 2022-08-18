@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Weeklython.iml" filepath="$PROJECT_DIR$/.idea/Weeklython.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PassBot.iml" filepath="$PROJECT_DIR$/PassBot.iml" />
     </modules>
   </component>
 </project>

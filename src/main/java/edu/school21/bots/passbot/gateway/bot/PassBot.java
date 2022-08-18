@@ -1,12 +1,13 @@
 package edu.school21.bots.passbot.gateway.bot;
 
+import edu.school21.bots.passbot.basicui.commands.meta.SimpleCommand;
+import edu.school21.bots.passbot.basicui.commands.meta.Commands;
 import edu.school21.bots.passbot.gateway.config.BotConfig;
-import edu.school21.bots.passbot.basicui.commands.Command;
-import edu.school21.bots.passbot.basicui.commands.Commands;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -16,14 +17,14 @@ import org.telegram.telegrambots.session.TelegramLongPollingSessionBot;
 
 import java.util.Optional;
 
+@Component
 public class PassBot extends TelegramLongPollingSessionBot {
     private static final Logger logger = LoggerFactory.getLogger(PassBot.class);
     private final BotConfig config;
-    private final Commands commands;
 
     public PassBot(BotConfig config) {
         this.config = config;
-        commands = new Commands();
+//        commands = new Commands();
     }
 
     @Override
@@ -51,11 +52,12 @@ public class PassBot extends TelegramLongPollingSessionBot {
     }
 
     private SendMessage manageMessage(Message message, Session session) {
-        Command command = (Command) session.getAttribute("command");
+        SimpleCommand command = (SimpleCommand) session.getAttribute("command");
         SendMessage response;
 
         if (command == null) {
-            command = commands.getCommandByName(message.getChatId(), message.getText());
+            command = Commands.getCommandByName(message.getChatId(), message.getText());
+            command.init();
             session.setAttribute("command", command);
         }
         else {
