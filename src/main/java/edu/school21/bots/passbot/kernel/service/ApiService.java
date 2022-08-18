@@ -52,6 +52,7 @@ public class ApiService {
 		ResponseEntity<String> peers = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 		JsonNode node1 = mapper.readTree(peers.getBody());
 		Iterator<Map.Entry<String, JsonNode>> node2 = node1.path(0).fields();
+		String id = null;
 		while (node2.hasNext()) {
 			Map.Entry<String, JsonNode> tmp = node2.next();
 			if (tmp.getKey().equals("login")) {
@@ -60,8 +61,28 @@ public class ApiService {
 			if (tmp.getKey().equals("staff?")) {
 				user.setRole(tmp.getValue().asText().equals("false") ? "USER" : "ADMIN");
 			}
-//            System.out.println(tmp.getKey() + " : " + tmp.getValue());
+			if (tmp.getKey().equals("email")) {
+				user.setEmail(tmp.getValue().asText());
+			}
+			if (tmp.getKey().equals("id")) {
+				id = tmp.getValue().asText();
+			}
 		}
+//		String url_campus = "https://api.intra.42.fr/v2/users/" + id;
+//		HttpHeaders headers2 = new HttpHeaders();
+//		headers2.add("Authorization", "Bearer " + token);
+//		HttpEntity<String> entity1 = new HttpEntity<>(headers2);
+//
+//		ResponseEntity<String> peers2 = restTemplate.exchange(url_campus, HttpMethod.GET, entity1, String.class);
+//		System.out.println(peers2.getBody());
+//		JsonNode node3 = mapper.readTree(peers2.getBody());
+//		Iterator<Map.Entry<String, JsonNode>> node4 = node3.path(0).fields();
+//		while (node4.hasNext()) {
+//			Map.Entry<String, JsonNode> tmp1 = node4.next();
+//			if (tmp1.getKey().equals("campus")) {
+//				user.setCampus(tmp1.getValue().path(0).path("name").asText());
+//			}
+//		}
 		return user;
 	}
 }
