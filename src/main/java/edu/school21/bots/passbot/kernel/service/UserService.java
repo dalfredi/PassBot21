@@ -34,4 +34,8 @@ public class UserService {
         Optional<User> user = usersRepository.getUserByChatId(chatId);
         return user.orElse(null);
     }
+
+    public void saveUser(User user) {
+       usersRepository.save(user);
+    }
 }
