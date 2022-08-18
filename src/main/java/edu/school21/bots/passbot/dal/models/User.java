@@ -23,6 +23,8 @@ public class User {
     private Long id;
     private Long chatId;
     private String login;
+    private String email;
+    private String campus;
     private String name;
     private String surname;
     private String patronymic;

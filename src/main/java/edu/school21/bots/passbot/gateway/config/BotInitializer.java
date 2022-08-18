@@ -2,7 +2,6 @@ package edu.school21.bots.passbot.gateway.config;
 
 import edu.school21.bots.passbot.basicui.commands.meta.CommandsFactory;
 import edu.school21.bots.passbot.gateway.bot.PassBot;
-import edu.school21.bots.passbot.kernel.service.UserService;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
