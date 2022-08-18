@@ -24,6 +24,7 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.*;
 
+
 public class SessionPassBot extends TelegramLongPollingSessionBot {
     private static final Logger logger = LoggerFactory.getLogger(SessionPassBot.class);
     BotConfig config;
@@ -77,7 +78,7 @@ public class SessionPassBot extends TelegramLongPollingSessionBot {
         JsonNode node = mapper.readTree(response.getBody());
         String token = node.path("access_token").asText();
 
-        String url = "https://api.intra.42.fr/v2/users?filter[login]=" + name;
+        String url = "https://api.intra.42.fr/v2/users?filter[email]=" + name;
         HttpHeaders headers1 = new HttpHeaders();
         headers1.add("Authorization", "Bearer " + token);
         HttpEntity<String> entity = new HttpEntity<>(headers1);
@@ -87,7 +88,7 @@ public class SessionPassBot extends TelegramLongPollingSessionBot {
         Iterator<Map.Entry<String, JsonNode>> node2 = node1.path(0).fields();
         while (node2.hasNext()) {
             Map.Entry<String, JsonNode> tmp = node2.next();
-            System.out.println(tmp.getKey() + " : " + tmp.getValue());
+            sendMessage(chatId,tmp.getKey() + " : " + tmp.getValue());
         }
     }
 
