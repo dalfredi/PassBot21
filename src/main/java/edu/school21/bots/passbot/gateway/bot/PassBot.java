@@ -1,12 +1,7 @@
 package edu.school21.bots.passbot.gateway.bot;
 
-import edu.school21.bots.passbot.basicui.commands.meta.CommandsFactory;
 import edu.school21.bots.passbot.basicui.commands.meta.Command;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.school21.bots.passbot.basicui.commands.meta.SimpleCommand;
-import edu.school21.bots.passbot.basicui.commands.meta.Commands;
-import edu.school21.bots.passbot.dal.models.User;
+import edu.school21.bots.passbot.basicui.commands.meta.CommandsFactory;
 import edu.school21.bots.passbot.gateway.config.BotConfig;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
@@ -20,10 +15,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.session.TelegramLongPollingSessionBot;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Optional;
 
 @Component

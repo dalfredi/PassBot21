@@ -2,18 +2,15 @@ package edu.school21.bots.passbot.basicui.commands;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.school21.bots.passbot.basicui.commands.meta.SimpleCommand;
-import edu.school21.bots.passbot.basicui.commands.meta.CommandWithArguments;
 import edu.school21.bots.passbot.basicui.commands.meta.Command;
-import edu.school21.bots.passbot.dal.models.User;
-import edu.school21.bots.passbot.dal.repositories.UsersRepository;
+import edu.school21.bots.passbot.basicui.commands.meta.CommandWithArguments;
 import edu.school21.bots.passbot.dal.models.User;
 import edu.school21.bots.passbot.kernel.service.UserService;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.codec.binary.Base64;
-import org.springframework.http.*;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -25,51 +22,46 @@ import java.util.*;
 @Scope("prototype")
 @Setter
 @Getter
-public class StartCommand implements CommandWithArguments, SimpleCommand {
+public class StartCommand implements CommandWithArguments, Command {
     private final String credentialId = "Nice";
     private final String clientSecret = "VeryNice";
-public class StartCommand implements CommandWithArguments, Command {
     private final String name = "/start";
     private final Integer maxArgs = 4;
     private final Map<Integer, String> prompts = new HashMap<>();
     private Long chatId;
     private Integer currentStep;
     private List<String> arguments = new ArrayList<>();
-    private final UsersRepository usersRepository;
-
-    public StartCommand(UsersRepository usersRepository) {
-        this.usersRepository = usersRepository;
-        prompts.put(0, "Привет! Давай познакомимся. Введи свой ник в Школе21");
-        prompts.put(1, "Теперь введи свою фамилию");
-        prompts.put(2, "Введи своё имя");
-        prompts.put(3, "Введи своё отчество");
     private final UserService userService;
 
     public StartCommand(UserService userService) {
         this.userService = userService;
-        prompts.put(0, "Введи свой ник в Школе21");
-
+        prompts.put(0, "Привет! Давай познакомимся. Введи свой ник в Школе21");
+        prompts.put(1, "Теперь введи свою фамилию");
+        prompts.put(2, "Введи своё имя");
+        prompts.put(3, "Введи своё отчество");
     }
 
     @Override
     public SendMessage execute() {
-        try {
-            User user = requestAccessToken(arguments.get(0));
-            userService.saveUser(user);
-        } catch (Exception e) {
-            e.getMessage();
-        }
         SendMessage response = new SendMessage();
         response.setChatId(chatId);
 
-        User user = new User();
+        User user = null;
+        try {
+            user = requestAccessToken(arguments.get(0));
+        } catch (Exception e) {
+            e.getMessage();
+        }
+        if (user == null) {
+            response.setText("Такого пользователя нет в Интре! Попробуй ещё.");
+            return response;
+        }
         user.setChatId(chatId);
         user.setLogin(arguments.get(0));
         user.setSurname(arguments.get(1));
         user.setName(arguments.get(2));
         user.setPatronymic(arguments.get(3));
-        user.setRole("USER");
-        usersRepository.save(user);
+        userService.saveUser(user);
 
         response.setText("Отлично! Вы успешно вошли со следующими данными:\n" +
                 "логин в Интре: " + user.getLogin() + "\n" +
@@ -114,7 +106,6 @@ public class StartCommand implements CommandWithArguments, Command {
             if (tmp.getKey().equals("staff?")) {
                 user.setRole(tmp.getValue().asText().equals("false") ? "USER" : "ADMIN");
             }
-//            System.out.println(tmp.getKey() + " : " + tmp.getValue());
         }
         return user;
     }
