@@ -4,6 +4,8 @@ import edu.school21.bots.passbot.dal.models.User;
 import edu.school21.bots.passbot.dal.repositories.UsersRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 
 //@RequiredArgsConstructor
 @Component
@@ -26,5 +28,10 @@ public class UserService {
 
         user = usersRepository.save(user);
         return user;
+    }
+
+    public User getByChatId(Long chatId) {
+        Optional<User> user = usersRepository.getUserByChatId(chatId);
+        return user.orElse(null);
     }
 }

@@ -3,8 +3,10 @@ package edu.school21.bots.passbot.basicui.commands;
 import edu.school21.bots.passbot.basicui.commands.meta.CommandWithArguments;
 import edu.school21.bots.passbot.dal.models.Order;
 import edu.school21.bots.passbot.kernel.service.OrderService;
+import edu.school21.bots.passbot.kernel.service.UserService;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
+@Scope("prototype")
 @Setter
 @Getter
 public class NewRequestCommand implements CommandWithArguments {
@@ -27,10 +30,12 @@ public class NewRequestCommand implements CommandWithArguments {
     private Integer currentStep;
     private List<String> arguments = new ArrayList<>();
     private final OrderService orderService;
+    private final UserService userService;
 
-    public NewRequestCommand(OrderService orderService) {
-        prompts.put(0, "Введите фамилию гостя");
-        prompts.put(1, "Введите имя гостя");
+    public NewRequestCommand(OrderService orderService, UserService userService) {
+        this.userService = userService;
+        prompts.put(0, "Чтобы создать новую заявку, введите фамилию гостя");
+        prompts.put(1, "Теперь введите имя гостя");
         prompts.put(2, "Введите отчество гостя");
         prompts.put(3, "Введите дату в формате ДД.ММ.ГГГГ");
         this.orderService = orderService;
@@ -40,7 +45,7 @@ public class NewRequestCommand implements CommandWithArguments {
     public SendMessage execute() {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
-        // Здесь нужно передать команду и аргументы дальше, на контроллер
+
         Order order = orderService.createOrder(
                 chatId,
                 arguments.get(0),
@@ -48,7 +53,18 @@ public class NewRequestCommand implements CommandWithArguments {
                 arguments.get(2),
                 LocalDate.parse(arguments.get(3), DateTimeFormatter.ofPattern("dd.MM.yyyy"))
         );
-        sendMessage.setText("Заявка " + order.toString() + " успешно создана!");
+        sendMessage.setText("Заявка успешно создана со следующими данными! \n" +
+                "Твои ФИО: " +
+                order.getPeer().getSurname() + " " +
+                order.getPeer().getName() + " " +
+                order.getPeer().getPatronymic() + "\n" +
+                "ФИО Гостя: " +
+                order.getGuest().getSurname() + " " +
+                order.getGuest().getName() + " " +
+                order.getGuest().getPatronymic() + "\n" +
+                "Дата посещения: " +
+                order.getStartTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+        );
         return sendMessage;
     }
 }

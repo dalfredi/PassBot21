@@ -1,11 +1,15 @@
 package edu.school21.bots.passbot.basicui.commands;
 
-import edu.school21.bots.passbot.basicui.commands.meta.SimpleCommand;
+import edu.school21.bots.passbot.basicui.commands.meta.Command;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-public class NoCommand implements SimpleCommand {
+@Component
+@Scope("prototype")
+public class NoCommand implements Command {
     @Setter
     @Getter
     Long chatId;

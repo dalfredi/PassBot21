@@ -4,6 +4,7 @@ import edu.school21.bots.passbot.dal.models.Order;
 import edu.school21.bots.passbot.dal.models.User;
 import edu.school21.bots.passbot.dal.repositories.OrdersRepository;
 import edu.school21.bots.passbot.dal.repositories.UsersRepository;
+import org.apache.shiro.session.InvalidSessionException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,17 +22,19 @@ public class OrderService {
 
 //    TODO fetch actual start and end time from some config
     public Order createOrder(Long chatId,
-                      String guestName,
-                      String guestSurname,
-                      String guestPatronymic,
-                      LocalDate date) {
+                             String guestName,
+                             String guestSurname,
+                             String guestPatronymic,
+                             LocalDate date) {
         User guest = new User();
         guest.setName(guestName);
         guest.setSurname(guestSurname);
         guest.setPatronymic(guestPatronymic);
         usersRepository.save(guest);
 
-        User peer = usersRepository.getUserByChatId(chatId).get();
+        User peer = usersRepository.getUserByChatId(chatId).orElse(null);
+        if (peer == null)
+            throw new InvalidSessionException("Session does not contain chatid");
 
         Order order = new Order();
         order.setGuest(guest);
