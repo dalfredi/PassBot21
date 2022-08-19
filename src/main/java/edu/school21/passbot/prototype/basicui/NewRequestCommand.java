@@ -1,5 +1,6 @@
 package edu.school21.passbot.prototype.basicui;
 
+import edu.school21.passbot.prototype.gateway.commandsfactory.Command;
 import edu.school21.passbot.prototype.gateway.commandsfactory.CommandWithArguments;
 import edu.school21.passbot.prototype.kernel.models.Order;
 import edu.school21.passbot.prototype.kernel.models.User;
@@ -13,6 +14,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,19 +67,39 @@ public class NewRequestCommand implements CommandWithArguments {
         CommandWithArguments.super.init();
     }
 
+    public void addArgument(String argument) {
+        if (currentStep == 4) {
+            try {
+                LocalDate.parse(argument, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+            } catch (DateTimeParseException e) {
+                error = true;
+                responseText = argument + " - неправильная дата, попробуйте ещё раз";
+                return;
+            }
+        }
+        CommandWithArguments.super.addArgument(argument);
+    }
+
     @Override
     public SendMessage execute() {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
+        SendMessage response = new SendMessage();
+        response.setChatId(chatId);
 
+        LocalDate localDate;
+        try {
+            localDate = LocalDate.parse(arguments.get(3), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        } catch (DateTimeParseException e) {
+            response.setText("Вы неправильно ввели дату, создайте заявку заново");
+            return response;
+        }
         Order order = orderService.createOrder(
                 chatId,
                 arguments.get(0),
                 arguments.get(1),
                 arguments.get(2),
-                LocalDate.parse(arguments.get(3), DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+                localDate
         );
-        sendMessage.setText("Заявка успешно создана со следующими данными! \n" +
+        response.setText("Заявка успешно создана со следующими данными! \n" +
                 "Твой логин: " +
                 order.getPeer().getLogin() + "\n" +
                 "Твои ФИО: " +
@@ -91,6 +113,6 @@ public class NewRequestCommand implements CommandWithArguments {
                 "Дата посещения: " +
                 order.getStartTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
         );
-        return sendMessage;
+        return response;
     }
 }
