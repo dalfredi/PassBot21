@@ -65,7 +65,7 @@ public class ReplyKeyboardMarkupCustom {
         // Add all the keyboard rows to the list
         keyboard.add(keyboardFirstRow);
         keyboard.add(keyboardSecondRow);
-
+        keyboard.add(keyboardThirdRow);
         // and assign this list to our keyboard
         replyKeyboardMarkup.setKeyboard(keyboard);
         sendMessage.setReplyMarkup(replyKeyboardMarkup);
