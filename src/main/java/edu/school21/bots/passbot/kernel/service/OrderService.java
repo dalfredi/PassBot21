@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -47,4 +48,9 @@ public class OrderService {
         order = ordersRepository.save(order);
         return order;
     }
+
+    public List<Order> getAllActive() {
+        return ordersRepository.findAllByStatus("На рассмотрении");
+    }
+
 }

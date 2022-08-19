@@ -1,4 +1,4 @@
-package edu.school21.bots.passbot.basicui.commands.meta;
+package edu.school21.bots.passbot.basicui.commands.factory;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 

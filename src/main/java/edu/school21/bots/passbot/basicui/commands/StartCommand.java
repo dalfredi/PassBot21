@@ -1,7 +1,7 @@
 package edu.school21.bots.passbot.basicui.commands;
 
-import edu.school21.bots.passbot.basicui.commands.meta.Command;
-import edu.school21.bots.passbot.basicui.commands.meta.CommandWithArguments;
+import edu.school21.bots.passbot.basicui.commands.factory.Command;
+import edu.school21.bots.passbot.basicui.commands.factory.CommandWithArguments;
 import edu.school21.bots.passbot.dal.models.User;
 import edu.school21.bots.passbot.kernel.service.ApiService;
 import edu.school21.bots.passbot.kernel.service.UserService;
@@ -78,7 +78,7 @@ public class StartCommand implements CommandWithArguments, Command {
         } catch (Exception e) {
             e.getMessage();
         }
-        if (user.getLogin() == null) {
+        if (user == null || user.getLogin() == null) {
             response.setText("Такого пользователя нет в Интре! Попробуй ещё раз /start.");
             return response;
         }

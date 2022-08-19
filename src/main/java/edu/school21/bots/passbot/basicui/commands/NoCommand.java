@@ -1,6 +1,6 @@
 package edu.school21.bots.passbot.basicui.commands;
 
-import edu.school21.bots.passbot.basicui.commands.meta.Command;
+import edu.school21.bots.passbot.basicui.commands.factory.Command;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.annotation.Scope;

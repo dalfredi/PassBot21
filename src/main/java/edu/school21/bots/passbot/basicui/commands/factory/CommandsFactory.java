@@ -1,4 +1,4 @@
-package edu.school21.bots.passbot.basicui.commands.meta;
+package edu.school21.bots.passbot.basicui.commands.factory;
 
 import edu.school21.bots.passbot.basicui.commands.NoCommand;
 import org.springframework.beans.factory.BeanFactory;

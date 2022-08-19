@@ -22,15 +22,15 @@ public class Order {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private Long duration;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="peer_id")
     @ToString.Exclude
     private User peer;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="guest_id")
     @ToString.Exclude
     private User guest;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="admin_id")
     @ToString.Exclude
     private User admin;

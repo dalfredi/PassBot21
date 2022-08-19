@@ -1,6 +1,6 @@
 package edu.school21.bots.passbot.basicui.commands;
 
-import edu.school21.bots.passbot.basicui.commands.meta.CommandWithArguments;
+import edu.school21.bots.passbot.basicui.commands.factory.CommandWithArguments;
 import edu.school21.bots.passbot.dal.models.User;
 import edu.school21.bots.passbot.kernel.service.UserService;
 import lombok.Getter;

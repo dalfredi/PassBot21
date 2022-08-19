@@ -1,8 +1,7 @@
 package edu.school21.bots.passbot.gateway.bot;
 
-import edu.school21.bots.passbot.basicui.commands.meta.Command;
-import edu.school21.bots.passbot.basicui.commands.meta.CommandsFactory;
-import edu.school21.bots.passbot.dal.models.User;
+import edu.school21.bots.passbot.basicui.commands.factory.Command;
+import edu.school21.bots.passbot.basicui.commands.factory.CommandsFactory;
 import edu.school21.bots.passbot.gateway.config.BotConfig;
 import lombok.SneakyThrows;
 import org.apache.shiro.session.InvalidSessionException;
@@ -45,7 +44,7 @@ public class PassBot extends TelegramLongPollingSessionBot {
             Message message = update.getMessage();
             response = manageMessage(message, session);
         }
-        if (update.hasCallbackQuery()) {
+        else if (update.hasCallbackQuery()) {
             CallbackQuery callbackQuery = update.getCallbackQuery();
             response = manageCallback(callbackQuery, session);
         }
@@ -61,7 +60,7 @@ public class PassBot extends TelegramLongPollingSessionBot {
     @SneakyThrows
     private SendMessage manageMessage(Message message, Session session) {
         Command command = (Command) session.getAttribute("command");
-        User user = (User) session.getAttribute("user");
+//        User user = (User) session.getAttribute("user");
         SendMessage response;
 
         if (command == null) {
@@ -92,7 +91,6 @@ public class PassBot extends TelegramLongPollingSessionBot {
             response = command.getNextPrompt();
         return response;
     }
-
     private void sendMessage(SendMessage message) {
         try {
             execute(message);
@@ -126,40 +124,6 @@ public class PassBot extends TelegramLongPollingSessionBot {
         this.execute(new SetMyCommands(
                 commandsList, new BotCommandScopeDefault(), null));
     }
-//    private User requestAccessToken(long chatId, String name) throws IOException {
-//        ResponseEntity<String> response;
-//        RestTemplate restTemplate = new RestTemplate();
-//        String clientId = config.getCredentialId() + ":" + config.getCredentialSecret();
-//        String encodedCredentials = new String(Base64.encodeBase64(clientId.getBytes()));
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-//        headers.add("Authorization", "Basic " + encodedCredentials);
-//
-//        HttpEntity<String> request = new HttpEntity<String>(headers);
-//        String access_token_url = "https://api.intra.42.fr/oauth/token";
-//        access_token_url += "?code=" + clientId;
-//        access_token_url += "&grant_type=client_credentials";
-//
-//        response = restTemplate.exchange(access_token_url, HttpMethod.POST, request, String.class);
-//        ObjectMapper mapper = new ObjectMapper();
-//        JsonNode node = mapper.readTree(response.getBody());
-//        String token = node.path("access_token").asText();
-//
-//        String url = "https://api.intra.42.fr/v2/users?filter[email]=" + name;
-//        HttpHeaders headers1 = new HttpHeaders();
-//        headers1.add("Authorization", "Bearer " + token);
-//        HttpEntity<String> entity = new HttpEntity<>(headers1);
-//
-//        ResponseEntity<String> peers = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-//        JsonNode node1 = mapper.readTree(peers.getBody());
-//        Iterator<Map.Entry<String, JsonNode>> node2 = node1.path(0).fields();
-//        while (node2.hasNext()) {
-//            Map.Entry<String, JsonNode> tmp = node2.next();
-//            System.out.println(tmp.getKey() + " : " + tmp.getValue());
-//        }
-//
-//        return null;
-//    }
 }
 
 

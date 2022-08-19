@@ -1,6 +1,6 @@
 package edu.school21.bots.passbot.basicui.commands;
 
-import edu.school21.bots.passbot.basicui.commands.meta.CommandWithArguments;
+import edu.school21.bots.passbot.basicui.commands.factory.CommandWithArguments;
 import edu.school21.bots.passbot.dal.models.Order;
 import edu.school21.bots.passbot.dal.models.User;
 import edu.school21.bots.passbot.kernel.service.OrderService;
@@ -52,6 +52,11 @@ public class NewRequestCommand implements CommandWithArguments {
     @Override
     public void init() {
         User user = userService.getByChatId(chatId);
+        if (user == null) {
+            error = true;
+            responseText = "Сначала вам нужно представиться /start";
+            return;
+        }
         if (!user.getRegistered()) {
             error = true;
             responseText = "Сначала вам нужно зарегистрироваться /register";

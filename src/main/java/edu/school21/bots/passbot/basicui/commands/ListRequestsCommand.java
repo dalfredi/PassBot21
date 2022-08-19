@@ -1,6 +1,7 @@
 package edu.school21.bots.passbot.basicui.commands;
 
-import edu.school21.bots.passbot.basicui.commands.meta.Command;
+import edu.school21.bots.passbot.basicui.commands.factory.Command;
+import edu.school21.bots.passbot.kernel.service.OrderService;
 import edu.school21.bots.passbot.kernel.service.UserService;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,8 +18,10 @@ public class ListRequestsCommand implements Command {
     @Getter
     Long chatId;
     private final UserService userService;
-    public ListRequestsCommand(UserService userService) {
+    private final OrderService orderService;
+    public ListRequestsCommand(UserService userService, OrderService orderService) {
         this.userService = userService;
+        this.orderService = orderService;
     }
 
 //    !TODO list only active
