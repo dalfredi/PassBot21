@@ -40,6 +40,9 @@ public class UserService {
         return user.orElse(null);
     }
 
+    public void updateUser(User user) {
+        usersRepository.saveAndFlush(user);
+    }
 
     public void saveUser(User user) {
        usersRepository.save(user);

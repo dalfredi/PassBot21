@@ -12,9 +12,10 @@ import java.util.Map;
 public class CommandsFactory {
     public static final String HELP_TEXT = "Этот бот поможет вам провести гостей в кампус Школы 21\n" +
             "/start - запустить бота\n" +
-            "/new - создать новую заявку на посещение\n" +
-            "/list - показать все активные заявки\n" +
-            "/help - вывести эту справку";
+            "/register - ввести свои ФИО\n" +
+            "/new - создать новую заявку\n" +
+            "/list - показать все заявки\n" +
+            "/help - показать все доступные команды";
     private final Map<String, Command> commandNameMapping = new HashMap<>();
     private final BeanFactory context;
     private List<Command> commands;

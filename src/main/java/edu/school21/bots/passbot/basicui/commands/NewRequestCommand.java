@@ -2,6 +2,7 @@ package edu.school21.bots.passbot.basicui.commands;
 
 import edu.school21.bots.passbot.basicui.commands.meta.CommandWithArguments;
 import edu.school21.bots.passbot.dal.models.Order;
+import edu.school21.bots.passbot.dal.models.User;
 import edu.school21.bots.passbot.kernel.service.OrderService;
 import edu.school21.bots.passbot.kernel.service.UserService;
 import lombok.Getter;
@@ -31,14 +32,32 @@ public class NewRequestCommand implements CommandWithArguments {
     private List<String> arguments = new ArrayList<>();
     private final OrderService orderService;
     private final UserService userService;
+    private boolean error;
+    private String responseText;
 
     public NewRequestCommand(OrderService orderService, UserService userService) {
         this.userService = userService;
+        this.orderService = orderService;
         prompts.put(0, "Чтобы создать новую заявку, введите фамилию гостя");
         prompts.put(1, "Теперь введите имя гостя");
         prompts.put(2, "Введите отчество гостя");
         prompts.put(3, "Введите дату в формате ДД.ММ.ГГГГ");
-        this.orderService = orderService;
+    }
+
+    @Override
+    public boolean isError() {
+        return error;
+    }
+
+    @Override
+    public void init() {
+        User user = userService.getByChatId(chatId);
+        if (!user.getRegistered()) {
+            error = true;
+            responseText = "Сначала вам нужно зарегистрироваться /register";
+            return;
+        }
+        CommandWithArguments.super.init();
     }
 
     @Override
@@ -54,6 +73,8 @@ public class NewRequestCommand implements CommandWithArguments {
                 LocalDate.parse(arguments.get(3), DateTimeFormatter.ofPattern("dd.MM.yyyy"))
         );
         sendMessage.setText("Заявка успешно создана со следующими данными! \n" +
+                "Твой логин: " +
+                order.getPeer().getLogin() + "\n" +
                 "Твои ФИО: " +
                 order.getPeer().getSurname() + " " +
                 order.getPeer().getName() + " " +

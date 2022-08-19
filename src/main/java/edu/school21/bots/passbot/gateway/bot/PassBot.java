@@ -2,6 +2,7 @@ package edu.school21.bots.passbot.gateway.bot;
 
 import edu.school21.bots.passbot.basicui.commands.meta.Command;
 import edu.school21.bots.passbot.basicui.commands.meta.CommandsFactory;
+import edu.school21.bots.passbot.dal.models.User;
 import edu.school21.bots.passbot.gateway.config.BotConfig;
 import lombok.SneakyThrows;
 import org.apache.shiro.session.InvalidSessionException;
@@ -60,6 +61,7 @@ public class PassBot extends TelegramLongPollingSessionBot {
     @SneakyThrows
     private SendMessage manageMessage(Message message, Session session) {
         Command command = (Command) session.getAttribute("command");
+        User user = (User) session.getAttribute("user");
         SendMessage response;
 
         if (command == null) {

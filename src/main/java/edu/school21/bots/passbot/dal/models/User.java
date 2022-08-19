@@ -29,6 +29,7 @@ public class User {
     private String surname;
     private String patronymic;
     private String role;
+    private Boolean registered;
     @ToString.Exclude
     @OneToMany(mappedBy = "peer",
             fetch = FetchType.EAGER,

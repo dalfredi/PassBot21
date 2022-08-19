@@ -13,7 +13,8 @@ create table if not exists bot.users (
                         name         text,
                         surname      text,
                         patronymic   text,
-                        role         text
+                        role         text,
+                        registered   boolean
 );
 
 create table if not exists bot.orders (

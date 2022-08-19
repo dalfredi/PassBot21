@@ -1,6 +1,7 @@
 package edu.school21.bots.passbot.basicui.commands;
 
 import edu.school21.bots.passbot.basicui.commands.meta.CommandWithArguments;
+import edu.school21.bots.passbot.dal.models.User;
 import edu.school21.bots.passbot.kernel.service.UserService;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,24 +27,75 @@ public class RegisterCommand implements CommandWithArguments {
     private List<String> arguments = new ArrayList<>();
 
     private final UserService userService;
+    private boolean error;
+    private String responseText;
 
     public RegisterCommand(UserService userService) {
+        this.userService = userService;
         prompts.put(0, "Введите вашу фамилию");
         prompts.put(1, "Введите ваше имя");
         prompts.put(2, "Введите ваше отчество");
-        this.userService = userService;
     }
 
     @Override
+    public boolean isError() {
+        return error;
+    }
+
+    @Override
+    public void init() {
+        User user = userService.getByChatId(chatId);
+        if (user == null) {
+            error = true;
+            responseText = "Сначала вам представиться: /start";
+            return;
+        }
+        CommandWithArguments.super.init();
+    }
+
+//    @SneakyThrows
+//    @Override
+//    public void addArgument(String argument) {
+//        // Perform check of argument number 0 and set responseText if error
+//        if (getCurrentStep() - 1 == 0) {
+//            User user = userService.getByLogin(argument);
+//            if (user != null) {
+//                error = true;
+//                responseText = "Вы уже зарегистрированы и можете создать новую заявку командой /new";
+//                return;
+//            }
+//            try {
+//                user = apiService.requestAccessToken(argument);
+//            } catch (Exception e) {
+//                e.getMessage();
+//            }
+//            if (user == null) {
+//                error = true;
+//                responseText = "Такого пользователя нет в интре, попробуй заново /start";
+//                return;
+//            }
+//        }
+//        CommandWithArguments.super.addArgument(argument);
+//    }
+
+    @Override
     public SendMessage execute() {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.setText("Вы успешно зарегистрированы!");
+        SendMessage response = new SendMessage();
+        response.setChatId(chatId);
 
-        userService.createUser(
-                chatId,
-                arguments.get(0), arguments.get(1), arguments.get(2));
 
-        return sendMessage;
+        User user = userService.getByChatId(chatId);
+        user.setRegistered(true);
+        user.setSurname(arguments.get(0));
+        user.setName(arguments.get(1));
+        user.setPatronymic(arguments.get(2));
+        userService.updateUser(user);
+
+        response.setText("Отлично! Вы успешно зарегистрировались со следующими данными:\n" +
+                "логин: " + user.getLogin() + "\n" +
+                "роль: " + user.getRole() + "\n" +
+                "ФИО: " + user.getSurname() + " " + user.getName() + " " + user.getPatronymic() + "\n");
+
+        return response;
     }
 }
