@@ -30,11 +30,17 @@ public class CommandsFactory {
     }
 
     public Command getCommandByName(Long chatId, String name) {
-        Class<? extends Command> classname;
-        if (commandNameMapping.get(name) == null)
+        Class<? extends Command> classname = null;
+        Object obj1 = commandNameMapping.get(name);
+        Object obj2 = commandNameMapping2.get(name);
+        if (obj1 == null && obj2 == null)
             classname = NoCommand.class;
-        else
-            classname = commandNameMapping.get(name).getClass();
+        if (obj1 != null) {
+            classname = (Class<? extends Command>) obj1.getClass();
+        }
+        if (obj2 != null) {
+            classname = (Class<? extends Command>) obj2.getClass();
+        }
         Command command = context.getBean(classname);
         command.setChatId(chatId);
         return command;

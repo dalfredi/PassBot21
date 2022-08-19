@@ -65,4 +65,8 @@ public class OrderService {
         }
         return order;
     }
+
+    public List<Order> getAllByUserId(User user) {
+        return ordersRepository.findAllByPeer(user);
+    }
 }
