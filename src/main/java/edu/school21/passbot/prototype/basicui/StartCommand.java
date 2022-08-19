@@ -73,7 +73,7 @@ public class StartCommand implements CommandWithArguments, Command {
         try {
             user = apiService.requestAccessToken(arguments.get(0));
             System.out.println(user);
-            notificationService.sendEmail();
+//            notificationService.sendEmail();
             //terminate
         } catch (Exception e) {
             e.getMessage();

@@ -2,6 +2,7 @@ package edu.school21.passbot.prototype.admin;
 
 import edu.school21.passbot.prototype.gateway.bot.PassBot;
 import edu.school21.passbot.prototype.kernel.models.Order;
+import edu.school21.passbot.prototype.kernel.service.NotificationService;
 import edu.school21.passbot.prototype.kernel.service.OrderService;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
@@ -24,9 +25,11 @@ public class CallbackHandler {
     @Setter
     private PassBot passBot;
     private final OrderService orderService;
+    private final NotificationService notificationService;
 
-    public CallbackHandler(OrderService orderService) {
+    public CallbackHandler(OrderService orderService, NotificationService notificationService) {
         this.orderService = orderService;
+        this.notificationService = notificationService;
     }
 
     private void sendUpdate(BotApiMethod<Serializable> update) {
@@ -75,6 +78,21 @@ public class CallbackHandler {
                 .replaceFirst(status, status +
                         (status.equals(APPROVE_STATUS) ? APPROVE_POSTFIX : DECLINE_POSTFIX))
         );
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Ваша заявка №")
+                .append(orderId).append(" перешла в статус ").append(status)
+                .append("\r\n").append("--------------").append("\r\n")
+                .append("C уважением, Администрация Школы 21 города ")
+                .append(order.getCampus())
+                .append("\r\n");
+        notificationService.sendEmail(sb.toString(), "postfedor@gmail.com");
+
+//        SendMessage notification = new SendMessage();
+//        notification.setChatId(order.getPeer().getChatId());
+//        notification.setText("Ваша заявка на посещение перешла в статус " + status);
+//        passBot.sendMessage(notification);
+
         sendUpdate(response);
     }
 }
