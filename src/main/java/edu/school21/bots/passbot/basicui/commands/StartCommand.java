@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.school21.bots.passbot.basicui.commands.meta.Command;
 import edu.school21.bots.passbot.basicui.commands.meta.CommandWithArguments;
 import edu.school21.bots.passbot.dal.models.User;
+import edu.school21.bots.passbot.kernel.service.ApiService;
 import edu.school21.bots.passbot.kernel.service.UserService;
+import edu.school21.bots.passbot.mail.NotificationService;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -16,28 +18,32 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 @Scope("prototype")
 @Setter
 @Getter
 public class StartCommand implements CommandWithArguments, Command {
-    private final String credentialId = "Nice";
-    private final String clientSecret = "VeryNice";
+    private final NotificationService notificationService;
+    private final ApiService apiService;
     private final String name = "/start";
     private final Integer maxArgs = 4;
     private final Map<Integer, String> prompts = new HashMap<>();
     private Long chatId;
     private Integer currentStep;
-    private boolean error;
     private List<String> arguments = new ArrayList<>();
     private final UserService userService;
-    private String responseText;
 
-    public StartCommand(UserService userService) {
+    public StartCommand(UserService userService,
+                        NotificationService notificationService,
+                        ApiService apiService) {
         this.userService = userService;
+        this.notificationService = notificationService;
+        this.apiService = apiService;
         prompts.put(0, "Привет! Давай познакомимся. Введи свой ник в Школе21");
         prompts.put(1, "Теперь введи свою фамилию");
         prompts.put(2, "Введи своё имя");
@@ -97,7 +103,10 @@ public class StartCommand implements CommandWithArguments, Command {
         }
         User user = null;
         try {
-            user = requestAccessToken(arguments.get(0));
+            user = apiService.requestAccessToken(arguments.get(0));
+            System.out.println(user);
+            userService.saveUser(user);
+            notificationService.sendEmail();
         } catch (Exception e) {
             e.getMessage();
         }
