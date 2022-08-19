@@ -23,6 +23,9 @@ import java.util.List;
 public class ListRequestsAdminCommand implements Command {
     @Getter
     private final String name = "/listall";
+
+    @Getter
+    private final String name2 = "Все заявки";
     @Setter
     @Getter
     private Long chatId;

@@ -25,6 +25,7 @@ public class StartCommand implements CommandWithArguments, Command {
     private final NotificationService notificationService;
     private final ApiService apiService;
     private final String name = "/start";
+    private final String name2 = "/start";
     private final Integer maxArgs = 1;
     private final Map<Integer, String> prompts = new HashMap<>();
     private boolean error;
@@ -74,6 +75,8 @@ public class StartCommand implements CommandWithArguments, Command {
             user = apiService.requestAccessToken(arguments.get(0));
             System.out.println(user);
 //            notificationService.sendEmail();
+            notificationService.sendEmail();
+
             //terminate
         } catch (Exception e) {
             e.getMessage();
@@ -82,7 +85,8 @@ public class StartCommand implements CommandWithArguments, Command {
             response.setText("Такого пользователя нет в Интре! Попробуй ещё раз /start.");
             return response;
         }
-
+        ReplyKeyboardMarkupCustom keyboard = new ReplyKeyboardMarkupCustom();
+        keyboard.setButtons(response, user.getRole());
         user.setChatId(chatId);
         user.setLogin(arguments.get(0));
         user.setRegistered(false);

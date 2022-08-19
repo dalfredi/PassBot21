@@ -17,12 +17,14 @@ public class CommandsFactory {
             "/list - показать все заявки\n" +
             "/help - показать все доступные команды";
     private final Map<String, Command> commandNameMapping = new HashMap<>();
+    private final Map<String, Command> commandNameMapping2 = new HashMap<>();
     private final BeanFactory context;
     private List<Command> commands;
 
     public CommandsFactory(List<Command> commands, BeanFactory context) {
         for (Command command : commands) {
             commandNameMapping.put(command.getName(), command);
+            commandNameMapping2.put(command.getName2(), command);
         }
         this.context = context;
     }

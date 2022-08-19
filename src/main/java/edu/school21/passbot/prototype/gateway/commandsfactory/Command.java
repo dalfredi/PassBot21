@@ -4,6 +4,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 public interface Command {
     String getName();
+    String getName2();
     void setChatId(Long id);
     Long getChatId();
     SendMessage execute();

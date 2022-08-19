@@ -27,6 +27,7 @@ import java.util.Map;
 public class NewRequestCommand implements CommandWithArguments {
 
     private final String name = "/new";
+    private final String name2 = "Новая заявка";
     private final Integer maxArgs = 4;
     private final Map<Integer, String> prompts = new HashMap<>();
     private Long chatId;
