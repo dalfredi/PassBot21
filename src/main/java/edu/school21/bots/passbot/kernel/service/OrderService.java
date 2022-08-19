@@ -30,6 +30,7 @@ public class OrderService {
         guest.setName(guestName);
         guest.setSurname(guestSurname);
         guest.setPatronymic(guestPatronymic);
+        guest.setRole("GUEST");
         usersRepository.save(guest);
 
         User peer = usersRepository.getUserByChatId(chatId).orElse(null);
