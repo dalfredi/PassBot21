@@ -14,6 +14,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 public class ListRequestsCommand implements Command {
     @Getter
     private final String name = "/list";
+    @Getter
+    private final String name2 = "Мои заявки";
     @Setter
     @Getter
     Long chatId;

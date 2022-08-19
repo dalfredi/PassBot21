@@ -22,6 +22,10 @@ public class NoCommand implements Command {
     }
 
     @Override
+    public String getName2() {
+        return null;
+    }
+    @Override
     public SendMessage execute() {
         SendMessage response = new SendMessage();
         response.setChatId(chatId);

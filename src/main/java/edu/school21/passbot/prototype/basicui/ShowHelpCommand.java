@@ -13,6 +13,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 public class ShowHelpCommand implements Command {
     @Getter
     private final String name = "/help";
+    @Getter
+    private final String name2 = "Помощь";
     @Setter
     @Getter
     Long chatId;

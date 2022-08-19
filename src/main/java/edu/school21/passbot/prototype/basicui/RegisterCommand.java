@@ -20,6 +20,7 @@ import java.util.Map;
 @Getter
 public class RegisterCommand implements CommandWithArguments {
     private final String name = "/register";
+    private final String name2 = "Ввести ФИО";
     private final Integer maxArgs = 3;
     private final Map<Integer, String> prompts = new HashMap<>();
     Long chatId;

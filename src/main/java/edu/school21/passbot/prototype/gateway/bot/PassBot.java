@@ -1,5 +1,6 @@
 package edu.school21.passbot.prototype.gateway.bot;
 
+import edu.school21.passbot.prototype.basicui.ReplyKeyboardMarkupCustom;
 import edu.school21.passbot.prototype.gateway.factory.Command;
 import edu.school21.passbot.prototype.gateway.factory.CommandsFactory;
 import edu.school21.passbot.prototype.gateway.config.BotConfig;
@@ -43,6 +44,7 @@ public class PassBot extends TelegramLongPollingSessionBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             Message message = update.getMessage();
             response = manageMessage(message, session);
+            ReplyKeyboardMarkupCustom keyboard = new ReplyKeyboardMarkupCustom();
         }
         else if (update.hasCallbackQuery()) {
             CallbackQuery callbackQuery = update.getCallbackQuery();
