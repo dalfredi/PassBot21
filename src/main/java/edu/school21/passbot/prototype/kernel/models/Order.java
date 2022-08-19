@@ -23,6 +23,7 @@ public class Order {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private Long duration;
+    private String campus;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="peer_id")
     @ToString.Exclude

@@ -23,6 +23,7 @@ create table if not exists bot.orders (
                         start_time   timestamp,
                         end_time     timestamp,
                         duration     integer,
+                        campus       text,
                         peer_id      integer references bot.users(user_id),
                         guest_id     integer references bot.users(user_id),
                         admin_id     integer references bot.users(user_id)

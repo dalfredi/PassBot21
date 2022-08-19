@@ -65,7 +65,9 @@ public class ListRequestsAdminCommand implements Command {
         SendMessage response = new SendMessage();
         response.setChatId(chatId);
 
-        List<Order> orders = orderService.getAllActive();
+        User admin = userService.getByChatId(chatId);
+
+        List<Order> orders = orderService.getAllActiveForCampus(admin.getCampus());
         if (orders.size() == 0) {
             response.setText("Сейчас активных заявок нет");
             return response;

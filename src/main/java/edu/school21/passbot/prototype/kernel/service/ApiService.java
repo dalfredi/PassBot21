@@ -68,21 +68,19 @@ public class ApiService {
 				id = tmp.getValue().asText();
 			}
 		}
-//		String url_campus = "https://api.intra.42.fr/v2/users/" + id;
-//		HttpHeaders headers2 = new HttpHeaders();
-//		headers2.add("Authorization", "Bearer " + token);
-//		HttpEntity<String> entity1 = new HttpEntity<>(headers2);
-//
-//		ResponseEntity<String> peers2 = restTemplate.exchange(url_campus, HttpMethod.GET, entity1, String.class);
-//		System.out.println(peers2.getBody());
-//		JsonNode node3 = mapper.readTree(peers2.getBody());
-//		Iterator<Map.Entry<String, JsonNode>> node4 = node3.path(0).fields();
-//		while (node4.hasNext()) {
-//			Map.Entry<String, JsonNode> tmp1 = node4.next();
-//			if (tmp1.getKey().equals("campus")) {
-//				user.setCampus(tmp1.getValue().path(0).path("name").asText());
-//			}
-//		}
+		String url_campus = "https://api.intra.42.fr/v2/users/" + id;
+		HttpHeaders headers2 = new HttpHeaders();
+		headers2.add("Authorization", "Bearer " + token);
+		HttpEntity<String> entity1 = new HttpEntity<>(headers2);
+		ResponseEntity<String> peers2 = restTemplate.exchange(url_campus, HttpMethod.GET, entity1, String.class);
+		JsonNode node3 = mapper.readTree(peers2.getBody());
+		Iterator<Map.Entry<String, JsonNode>> node4 = node3.fields();
+		while (node4.hasNext()) {
+			Map.Entry<String, JsonNode> tmp1 = node4.next();
+			if (tmp1.getKey().equals("campus")) {
+				user.setCampus(tmp1.getValue().path(0).path("name").asText());
+			}
+		}
 		return user;
 	}
 }

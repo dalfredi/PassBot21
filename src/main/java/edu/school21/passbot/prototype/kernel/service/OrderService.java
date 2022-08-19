@@ -45,13 +45,14 @@ public class OrderService {
         order.setStartTime(date.atTime(LocalTime.parse("10:00")));
         order.setEndTime(date.atTime(LocalTime.parse("21:00")));
         order.setStatus("На рассмотрении");
+        order.setCampus(peer.getCampus());
 
         order = ordersRepository.save(order);
         return order;
     }
 
-    public List<Order> getAllActive() {
-        return ordersRepository.findAllByStatus("На рассмотрении");
+    public List<Order> getAllActiveForCampus(String campus) {
+        return ordersRepository.findAllByStatusAndCampus("На рассмотрении", campus);
     }
 
     public Order changeStatus(Long orderId, String newStatus) {
