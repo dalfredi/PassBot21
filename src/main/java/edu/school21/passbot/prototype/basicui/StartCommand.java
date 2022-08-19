@@ -1,7 +1,7 @@
 package edu.school21.passbot.prototype.basicui;
 
-import edu.school21.passbot.prototype.gateway.factory.Command;
-import edu.school21.passbot.prototype.gateway.factory.CommandWithArguments;
+import edu.school21.passbot.prototype.gateway.commandsfactory.Command;
+import edu.school21.passbot.prototype.gateway.commandsfactory.CommandWithArguments;
 import edu.school21.passbot.prototype.kernel.models.User;
 import edu.school21.passbot.prototype.kernel.service.ApiService;
 import edu.school21.passbot.prototype.kernel.service.UserService;

@@ -1,6 +1,6 @@
 package edu.school21.passbot.prototype.gateway.config;
 
-import edu.school21.passbot.prototype.gateway.factory.CommandsFactory;
+import edu.school21.passbot.prototype.gateway.commandsfactory.CommandsFactory;
 import edu.school21.passbot.prototype.gateway.bot.PassBot;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;

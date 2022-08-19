@@ -1,7 +1,8 @@
 package edu.school21.passbot.prototype.gateway.bot;
 
-import edu.school21.passbot.prototype.gateway.factory.Command;
-import edu.school21.passbot.prototype.gateway.factory.CommandsFactory;
+import edu.school21.passbot.prototype.admin.ListRequestsAdminCommand;
+import edu.school21.passbot.prototype.gateway.commandsfactory.Command;
+import edu.school21.passbot.prototype.gateway.commandsfactory.CommandsFactory;
 import edu.school21.passbot.prototype.gateway.config.BotConfig;
 import lombok.SneakyThrows;
 import org.apache.shiro.session.InvalidSessionException;
@@ -65,6 +66,9 @@ public class PassBot extends TelegramLongPollingSessionBot {
 
         if (command == null) {
             command = commandsFactory.getCommandByName(message.getChatId(), message.getText());
+            if (command.getClass().equals(ListRequestsAdminCommand.class)) {
+                ((ListRequestsAdminCommand) command).setPassBot(this);
+            }
             command.init();
             if (command.isError()) {
                 response = new SendMessage();
@@ -91,7 +95,7 @@ public class PassBot extends TelegramLongPollingSessionBot {
             response = command.getNextPrompt();
         return response;
     }
-    private void sendMessage(SendMessage message) {
+    public void sendMessage(SendMessage message) {
         try {
             execute(message);
             logger.info("Message sent \"{}\" ", message.toString());
@@ -112,7 +116,7 @@ public class PassBot extends TelegramLongPollingSessionBot {
 
     @SneakyThrows
     private void setCommands() {
-        List<BotCommand> commandsList = new ArrayList<BotCommand>();
+        List<BotCommand> commandsList = new ArrayList<>();
         commandsList.add(
                 new BotCommand("start", "запустить бота и зарегистрироваться"));
         commandsList.add(

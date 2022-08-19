@@ -1,4 +1,4 @@
-package edu.school21.passbot.prototype.gateway.factory;
+package edu.school21.passbot.prototype.gateway.commandsfactory;
 
 import edu.school21.passbot.prototype.basicui.NoCommand;
 import org.springframework.beans.factory.BeanFactory;

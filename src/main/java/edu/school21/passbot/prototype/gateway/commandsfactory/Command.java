@@ -1,4 +1,4 @@
-package edu.school21.passbot.prototype.gateway.factory;
+package edu.school21.passbot.prototype.gateway.commandsfactory;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
