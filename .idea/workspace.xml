@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6ade759-3b3b-4ee7-af76-c1fa26944c9c" name="Changes" comment="Зарефакторил на структуру требуемую сабджектом">
+    <list default="true" id="c6ade759-3b3b-4ee7-af76-c1fa26944c9c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/school21/bots/passbot/kernel/service/ApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/school21/bots/passbot/kernel/service/ApiService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/school21/bots/passbot/basicui/commands/StartCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/school21/bots/passbot/basicui/commands/StartCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/school21/bots/passbot/gateway/bot/PassBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/school21/bots/passbot/gateway/bot/PassBot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,19 +57,11 @@
     <option name="showLibraryContents" value="true" />
     <option name="showVisibilityIcons" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="DatabaseDriversLRU" value="postgresql" />
-    <property name="ExpandSpringBootJavaOptionsPanel" value="true" />
-    <property name="RequestMappingsPanelOrder0" value="0" />
-    <property name="RequestMappingsPanelOrder1" value="1" />
-    <property name="RequestMappingsPanelWidth0" value="75" />
-    <property name="RequestMappingsPanelWidth1" value="75" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="node.js.detected.package.eslint" value="true" />
-    <property name="node.js.selected.package.eslint" value="(autodetect)" />
-    <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="nodejs_package_manager_path" value="npm" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "node.js.selected.package.tslint": "(autodetect)"
+  }
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="edu.school21.bots.passbot.basicui.commands" />
@@ -89,11 +83,11 @@
   </component>
   <component name="RunManager">
     <configuration name="PassBotApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="PassBot" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="edu.school21.bots.passbot.PassBotApplication" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="ALTERNATIVE_JRE_PATH" value="azul-1.8" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <module name="PassBot" />
       <option name="SHORTEN_COMMAND_LINE" value="NONE" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="edu.school21.bots.passbot.PassBotApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -178,7 +172,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Первый каркас бота" />
@@ -198,5 +191,15 @@
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="org.springframework.beans.factory.support.DefaultListableBeanFactory" memberName="dependentBeanMap" />
+        <PinnedItemInfo parentTag="java.util.concurrent.Executors$DelegatedScheduledExecutorService" memberName="e" />
+        <PinnedItemInfo parentTag="edu.school21.bots.passbot.basicui.commands.meta.Commands" memberName="commands" />
+      </pinned-members>
+    </pin-to-top-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Passbot22$PassBotApplication.ic" NAME="PassBotApplication Coverage Results" MODIFIED="1660832626789" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>
