@@ -35,6 +35,12 @@ public class UserService {
         return user.orElse(null);
     }
 
+    public User getByLogin(String login) {
+        Optional<User> user = usersRepository.getUserByLogin(login);
+        return user.orElse(null);
+    }
+
+
     public void saveUser(User user) {
        usersRepository.save(user);
     }

@@ -13,9 +13,17 @@ public interface Command {
 
     default void addArgument(String text) {}
 
+    default SendMessage checkArgument(String argument) {return null;}
+
     default boolean isReady() {
         return true;
     }
+    default boolean isError() {
+        return false;
+    }
+    default String getResponseText() {
+        return "";
+    };
 
     default SendMessage getNextPrompt() {
         return null;

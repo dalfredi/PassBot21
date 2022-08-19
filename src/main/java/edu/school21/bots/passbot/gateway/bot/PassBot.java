@@ -3,18 +3,24 @@ package edu.school21.bots.passbot.gateway.bot;
 import edu.school21.bots.passbot.basicui.commands.meta.Command;
 import edu.school21.bots.passbot.basicui.commands.meta.CommandsFactory;
 import edu.school21.bots.passbot.gateway.config.BotConfig;
+import lombok.SneakyThrows;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
+import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.session.TelegramLongPollingSessionBot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -51,6 +57,7 @@ public class PassBot extends TelegramLongPollingSessionBot {
         return null;
     }
 
+    @SneakyThrows
     private SendMessage manageMessage(Message message, Session session) {
         Command command = (Command) session.getAttribute("command");
         SendMessage response;
@@ -58,16 +65,28 @@ public class PassBot extends TelegramLongPollingSessionBot {
         if (command == null) {
             command = commandsFactory.getCommandByName(message.getChatId(), message.getText());
             command.init();
+            if (command.isError()) {
+                response = new SendMessage();
+                response.setChatId(command.getChatId());
+                response.setText(command.getResponseText());
+                return response;
+            }
             session.setAttribute("command", command);
         }
         else {
             command.addArgument(message.getText());
+            if (command.isError()) {
+                response = new SendMessage();
+                response.setChatId(command.getChatId());
+                response.setText(command.getResponseText());
+                session.setAttribute("command", null);
+                return response;
+            }
         }
         if (command.isReady()) {
             response = command.execute();
             session.setAttribute("command", null);
-        }
-        else
+        } else
             response = command.getNextPrompt();
         return response;
     }
@@ -91,6 +110,20 @@ public class PassBot extends TelegramLongPollingSessionBot {
         return config.getToken();
     }
 
+    @SneakyThrows
+    private void setCommands() {
+        List<BotCommand> commandsList = new ArrayList<BotCommand>();
+        commandsList.add(
+                new BotCommand("start", "запустить бота и зарегистрироваться"));
+        commandsList.add(
+                new BotCommand("new", "создать новую заявку на посещение гостя"));
+        commandsList.add(
+                new BotCommand("list", "показать все активные заявки"));
+        commandsList.add(
+                new BotCommand("help", "показать все доступные команды"));
+        this.execute(new SetMyCommands(
+                commandsList, new BotCommandScopeDefault(), null));
+    }
 //    private User requestAccessToken(long chatId, String name) throws IOException {
 //        ResponseEntity<String> response;
 //        RestTemplate restTemplate = new RestTemplate();

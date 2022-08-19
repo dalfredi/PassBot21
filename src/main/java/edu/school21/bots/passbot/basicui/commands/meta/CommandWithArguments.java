@@ -16,7 +16,6 @@ public interface CommandWithArguments extends Command {
     default void addArgument(String argument) {
         getArguments().add(argument);
     }
-
     default boolean isReady() {
         return getArguments().size() == getMaxArgs();
     }
@@ -35,4 +34,5 @@ public interface CommandWithArguments extends Command {
     void setArguments(List<String> arguments);
     List<String> getArguments();
     Map<Integer, String> getPrompts();
+
 }

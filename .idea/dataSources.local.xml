@@ -20,6 +20,9 @@
                 <name qname="bot" />
               </node>
             </node>
+            <node kind="database" qname="postgres">
+              <node kind="schema" qname="bot" />
+            </node>
           </node>
         </introspection-scope>
       </schema-mapping>

@@ -8,6 +8,7 @@ import edu.school21.bots.passbot.dal.models.User;
 import edu.school21.bots.passbot.kernel.service.UserService;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.*;
@@ -30,8 +31,10 @@ public class StartCommand implements CommandWithArguments, Command {
     private final Map<Integer, String> prompts = new HashMap<>();
     private Long chatId;
     private Integer currentStep;
+    private boolean error;
     private List<String> arguments = new ArrayList<>();
     private final UserService userService;
+    private String responseText;
 
     public StartCommand(UserService userService) {
         this.userService = userService;
@@ -39,6 +42,48 @@ public class StartCommand implements CommandWithArguments, Command {
         prompts.put(1, "Теперь введи свою фамилию");
         prompts.put(2, "Введи своё имя");
         prompts.put(3, "Введи своё отчество");
+        error = false;
+    }
+
+    @Override
+    public boolean isError() {
+        return error;
+    }
+
+    @Override
+    public void init() {
+        User user = userService.getByChatId(chatId);
+        if (user != null) {
+            error = true;
+            responseText = "Вы уже зарегистрированы и можете создать новую заявку командой /new";
+            return;
+        }
+        CommandWithArguments.super.init();
+    }
+
+    @SneakyThrows
+    @Override
+    public void addArgument(String argument) {
+        if (getCurrentStep() - 1 == 0) {
+            // Perform check of argument number 0 and set responseText if error
+            User user = userService.getByLogin(argument);
+            if (user != null) {
+                error = true;
+                responseText = "Вы уже зарегистрированы и можете создать новую заявку командой /new";
+                return;
+            }
+            try {
+                user = requestAccessToken(argument);
+            } catch (Exception e) {
+                e.getMessage();
+            }
+            if (user == null) {
+                error = true;
+                responseText = "Такого пользователя нет в интре, попробуй заново /start";
+                return;
+            }
+        }
+        CommandWithArguments.super.addArgument(argument);
     }
 
     @Override
@@ -46,6 +91,10 @@ public class StartCommand implements CommandWithArguments, Command {
         SendMessage response = new SendMessage();
         response.setChatId(chatId);
 
+        if (error) {
+            response.setText(responseText);
+            return response;
+        }
         User user = null;
         try {
             user = requestAccessToken(arguments.get(0));

@@ -12,7 +12,6 @@ import java.util.Map;
 public class CommandsFactory {
     public static final String HELP_TEXT = "Этот бот поможет вам провести гостей в кампус Школы 21\n" +
             "/start - запустить бота\n" +
-            "/register - ввести своё имя\n" +
             "/new - создать новую заявку на посещение\n" +
             "/list - показать все активные заявки\n" +
             "/help - вывести эту справку";

@@ -3,7 +3,6 @@ create schema if not exists bot;
 
 drop table if exists bot.users cascade;
 drop table if exists bot.orders cascade;
-drop table if exists bot.telegram_users cascade;
 
 create table if not exists bot.users (
                         user_id      serial primary key,
