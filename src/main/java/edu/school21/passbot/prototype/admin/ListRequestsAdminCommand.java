@@ -15,7 +15,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
@@ -72,29 +71,13 @@ public class ListRequestsAdminCommand implements Command {
             return response;
         }
 
-//        StringBuilder builder = new StringBuilder();
         for (Order order : orders) {
             response = new SendMessage();
             response.setChatId(chatId);
             response.enableMarkdown(true);
             response.setReplyMarkup(getInlineKeyboard(order.getId()));
 
-            User peer = order.getPeer();
-            User guest = order.getGuest();
-            response.setText(String.format(
-                            "*Заявка №%d*\n" +
-                            "Логин: %s\n" +
-                            "ФИО пира: %s %s %s\n" +
-                            "ФИО гостя: %s %s %s\n" +
-                            "Дата посещения: %s\n" +
-                            "Статус: %s\n\n",
-               order.getId(),
-               peer.getLogin(),
-               peer.getSurname(), peer.getName(), peer.getPatronymic(),
-               guest.getSurname(), guest.getName(), guest.getPatronymic(),
-               order.getStartTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
-               order.getStatus()
-            ));
+            response.setText(order.toMarkdownPrettyString());
             passBot.sendMessage(response);
         }
         return null;

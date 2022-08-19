@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -23,13 +24,13 @@ public class OrderService {
 
 //    TODO fetch actual start and end time from some config
     public Order createOrder(Long chatId,
-                             String guestName,
                              String guestSurname,
+                             String guestName,
                              String guestPatronymic,
                              LocalDate date) {
         User guest = new User();
-        guest.setName(guestName);
         guest.setSurname(guestSurname);
+        guest.setName(guestName);
         guest.setPatronymic(guestPatronymic);
         guest.setRole("GUEST");
         usersRepository.save(guest);
@@ -53,4 +54,14 @@ public class OrderService {
         return ordersRepository.findAllByStatus("На рассмотрении");
     }
 
+    public Order changeStatus(Long orderId, String newStatus) {
+        Optional<Order> optional = ordersRepository.findById(orderId);
+        Order order = null;
+        if (optional.isPresent()) {
+            order = optional.get();
+            order.setStatus(newStatus);
+            ordersRepository.saveAndFlush(order);
+        }
+        return order;
+    }
 }

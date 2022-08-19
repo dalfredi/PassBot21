@@ -1,5 +1,6 @@
 package edu.school21.passbot.prototype.gateway.bot;
 
+import edu.school21.passbot.prototype.admin.CallbackHandler;
 import edu.school21.passbot.prototype.admin.ListRequestsAdminCommand;
 import edu.school21.passbot.prototype.gateway.commandsfactory.Command;
 import edu.school21.passbot.prototype.gateway.commandsfactory.CommandsFactory;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -29,9 +31,12 @@ public class PassBot extends TelegramLongPollingSessionBot {
     private static final Logger logger = LoggerFactory.getLogger(PassBot.class);
     private final BotConfig config;
     private final CommandsFactory commandsFactory;
-    public PassBot(BotConfig config, CommandsFactory commandsFactory) {
+    private final CallbackHandler callbackHandler;
+    public PassBot(BotConfig config, CommandsFactory commandsFactory, CallbackHandler callbackHandler) {
         this.config = config;
         this.commandsFactory = commandsFactory;
+        this.callbackHandler = callbackHandler;
+        callbackHandler.setPassBot(this);
     }
 
     @Override
@@ -47,21 +52,20 @@ public class PassBot extends TelegramLongPollingSessionBot {
         }
         else if (update.hasCallbackQuery()) {
             CallbackQuery callbackQuery = update.getCallbackQuery();
-            response = manageCallback(callbackQuery, session);
+            response = manageCallback(callbackQuery);
         }
         if (response != null) {
             sendMessage(response);
         }
     }
 
-    private SendMessage manageCallback(CallbackQuery callbackQuery, Session session) {
-        return null;
+    private SendMessage manageCallback(CallbackQuery callbackQuery) {
+        return callbackHandler.handle(callbackQuery);
     }
 
-    @SneakyThrows
+//    @SneakyThrows
     private SendMessage manageMessage(Message message, Session session) {
         Command command = (Command) session.getAttribute("command");
-//        User user = (User) session.getAttribute("user");
         SendMessage response;
 
         if (command == null) {

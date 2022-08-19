@@ -5,6 +5,7 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Entity
@@ -46,5 +47,22 @@ public class Order {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public String toMarkdownPrettyString() {
+        return String.format(
+                "*Заявка №%d*\n" +
+                        "Логин: %s\n" +
+                        "ФИО пира: %s %s %s\n" +
+                        "ФИО гостя: %s %s %s\n" +
+                        "Дата посещения: %s\n" +
+                        "Статус: %s\n\n",
+                getId(),
+                peer.getLogin(),
+                peer.getSurname(), peer.getName(), peer.getPatronymic(),
+                guest.getSurname(), guest.getName(), guest.getPatronymic(),
+                getStartTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                getStatus()
+        );
     }
 }
