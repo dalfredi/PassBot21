@@ -70,7 +70,7 @@ public class ListRequestsAdminCommand implements Command {
 
         User admin = userService.getByChatId(chatId);
 
-        List<Order> orders = orderService.getAllActiveForCampus(admin.getCampus());
+        List<Order> orders = orderService.getAllActive();
         if (orders.size() == 0) {
             response.setText("Сейчас активных заявок нет");
             return response;

@@ -88,10 +88,12 @@ public class CallbackHandler {
                 .append("\r\n");
         notificationService.sendEmail(sb.toString(), "postfedor@gmail.com");
 
-//        SendMessage notification = new SendMessage();
-//        notification.setChatId(order.getPeer().getChatId());
-//        notification.setText("Ваша заявка на посещение перешла в статус " + status);
-//        passBot.sendMessage(notification);
+        SendMessage notification = new SendMessage();
+        notification.setChatId(order.getPeer().getChatId());
+        notification.setText(
+                "Ваша заявка на посещение сменила статус \n" + order.toMarkdownPrettyString());
+        notification.enableMarkdown(true);
+        passBot.sendMessage(notification);
 
         sendUpdate(response);
     }

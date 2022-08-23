@@ -9,4 +9,5 @@ import java.util.List;
 public interface OrdersRepository extends JpaRepository<Order, Long> {
     List<Order> findAllByStatusAndCampus(String status, String campus);
     List<Order> findAllByPeer(User user);
+    List<Order> findAllByStatus(String status);
 }

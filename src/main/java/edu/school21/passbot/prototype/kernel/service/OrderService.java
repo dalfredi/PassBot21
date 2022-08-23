@@ -55,6 +55,10 @@ public class OrderService {
         return ordersRepository.findAllByStatusAndCampus("На рассмотрении", campus);
     }
 
+    public List<Order> getAllActive() {
+        return ordersRepository.findAllByStatus("На рассмотрении");
+    }
+
     public Order changeStatus(Long orderId, String newStatus) {
         Optional<Order> optional = ordersRepository.findById(orderId);
         Order order = null;
