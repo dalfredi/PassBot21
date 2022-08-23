@@ -74,7 +74,7 @@ public class NewRequestCommand implements CommandWithArguments {
                 LocalDate.parse(argument, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
             } catch (DateTimeParseException e) {
                 error = true;
-                responseText = argument + " - неправильная дата, попробуйте ещё раз";
+                responseText = argument + " - неправильная дата, попробуйте создать заявку заново командой /new";
                 return;
             }
         }

@@ -74,12 +74,12 @@ public class StartCommand implements CommandWithArguments, Command {
         try {
             user = apiService.requestAccessToken(arguments.get(0));
             System.out.println(user);
-            //terminate
         } catch (Exception e) {
             e.getMessage();
         }
         if (user == null || user.getLogin() == null) {
-            response.setText("Такого пользователя нет в Интре! Попробуй ещё раз /start.");
+            response.setText("\"Такого пользователя нет в Интре! Попробуй ещё раз /start. " +
+                    "Чтобы протестировать полный функционал бота с правами администратора, введи ник at");
             return response;
         }
         ReplyKeyboardMarkupCustom keyboard = new ReplyKeyboardMarkupCustom();
