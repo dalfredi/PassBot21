@@ -1,9 +1,8 @@
 package edu.school21.passbot.bot;
 
 import edu.school21.passbot.admin.CallbackHandler;
-import edu.school21.passbot.admin.ListRequestsAdminCommand;
-import edu.school21.passbot.commandsfactory.Command;
 import edu.school21.passbot.commandsfactory.CommandsFactory;
+import edu.school21.passbot.commandsfactory.Command;
 import edu.school21.passbot.config.PassBotConfig;
 import lombok.SneakyThrows;
 import org.apache.shiro.session.InvalidSessionException;
@@ -22,6 +21,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.session.TelegramLongPollingSessionBot;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,17 +44,19 @@ public class PassBot extends TelegramLongPollingSessionBot {
             throw new InvalidSessionException("Session not found");
 
         Session session = optional.get();
-        SendMessage response = null;
+        List<SendMessage> responses = null;
         if (update.hasMessage() && update.getMessage().hasText()) {
             Message message = update.getMessage();
-            response = manageMessage(message, session);
+            responses = manageMessage(message, session);
         }
-        else if (update.hasCallbackQuery()) {
-            CallbackQuery callbackQuery = update.getCallbackQuery();
-            response = manageCallback(callbackQuery);
-        }
-        if (response != null) {
-            sendMessage(response);
+//        else if (update.hasCallbackQuery()) {
+//            CallbackQuery callbackQuery = update.getCallbackQuery();
+//            responses = manageCallback(callbackQuery);
+//        }
+        if (responses != null && !responses.isEmpty()) {
+            for (SendMessage response : responses)
+                if (response != null)
+                    sendMessage(response);
         }
     }
 
@@ -63,40 +65,37 @@ public class PassBot extends TelegramLongPollingSessionBot {
     }
 
 //    @SneakyThrows
-    private SendMessage manageMessage(Message message, Session session) {
+    private List<SendMessage> manageMessage(Message message, Session session) {
         Command command = (Command) session.getAttribute("command");
-        SendMessage response;
+        List<SendMessage> responses = new LinkedList<>();
 
         if (command == null) {
             command = commandsFactory.getCommandByName(message.getChatId(), message.getText());
-            if (command.getClass().equals(ListRequestsAdminCommand.class)) {
-                ((ListRequestsAdminCommand) command).setPassBot(this);
-            }
-            command.init();
-            if (command.isError()) {
-                response = new SendMessage();
-                response.setChatId(command.getChatId());
-                response.setText(command.getResponseText());
-                return response;
-            }
+            command.onCreate();
+//            if (command.isError()) {
+//                response = new SendMessage();
+//                response.setChatId(command.getChatId());
+//                response.setText(command.getResponseText());
+//                return response;
+//            }
             session.setAttribute("command", command);
         }
         else {
             command.addArgument(message.getText());
-            if (command.isError()) {
-                response = new SendMessage();
-                response.setChatId(command.getChatId());
-                response.setText(command.getResponseText());
-                session.setAttribute("command", null);
-                return response;
-            }
+//            if (command.isError()) {
+//                response = new SendMessage();
+//                response.setChatId(command.getChatId());
+//                response.setText(command.getResponseText());
+//                session.setAttribute("command", null);
+//                return response;
+//            }
         }
         if (command.isReady()) {
-            response = command.execute();
+            responses = command.execute();
             session.setAttribute("command", null);
         } else
-            response = command.getNextPrompt();
-        return response;
+            responses.add(command.getNextPrompt());
+        return responses;
     }
     public void sendMessage(SendMessage message) {
         try {

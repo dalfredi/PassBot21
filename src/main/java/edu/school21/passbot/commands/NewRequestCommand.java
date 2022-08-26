@@ -1,6 +1,6 @@
 package edu.school21.passbot.commands;
 
-import edu.school21.passbot.commandsfactory.CommandWithArguments;
+import edu.school21.passbot.commandsfactory.Command;
 import edu.school21.passbot.models.Order;
 import edu.school21.passbot.models.User;
 import edu.school21.passbot.service.OrderService;
@@ -14,32 +14,25 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 @Component
 @Scope("prototype")
 @Setter
 @Getter
-public class NewRequestCommand implements CommandWithArguments {
+public class NewRequestCommand extends Command {
 
     private final String name = "/new";
     private final String name2 = "Новая заявка";
-    private final Integer maxArgs = 4;
-    private final Map<Integer, String> prompts = new HashMap<>();
-    private Long chatId;
-    private Integer currentStep;
-    private List<String> arguments = new ArrayList<>();
     private final OrderService orderService;
     private final UserService userService;
-    private boolean error;
-    private String responseText;
+
 
     public NewRequestCommand(OrderService orderService, UserService userService) {
         this.userService = userService;
         this.orderService = orderService;
+        maxArgs = 4;
         prompts.put(0, "Чтобы создать новую заявку, введите фамилию гостя");
         prompts.put(1, "Теперь введите имя гостя");
         prompts.put(2, "Введите отчество гостя");
@@ -47,24 +40,16 @@ public class NewRequestCommand implements CommandWithArguments {
     }
 
     @Override
-    public boolean isError() {
-        return error;
-    }
-
-    @Override
-    public void init() {
+    public void onCreate() {
         User user = userService.getByChatId(chatId);
         if (user == null) {
-            error = true;
-            responseText = "Сначала вам нужно представиться /start";
+            setError("Сначала вам нужно представиться /start");
             return;
         }
         if (!user.getRegistered()) {
-            error = true;
-            responseText = "Сначала вам нужно зарегистрироваться /register";
+            setError("Сначала вам нужно зарегистрироваться /register");
             return;
         }
-        CommandWithArguments.super.init();
     }
 
     public void addArgument(String argument) {
@@ -72,16 +57,15 @@ public class NewRequestCommand implements CommandWithArguments {
             try {
                 LocalDate.parse(argument, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
             } catch (DateTimeParseException e) {
-                error = true;
-                responseText = argument + " - неправильная дата, попробуйте создать заявку заново командой /new";
+                setError(" - неправильная дата, попробуйте создать заявку заново командой /new");
                 return;
             }
         }
-        CommandWithArguments.super.addArgument(argument);
+        super.addArgument(argument);
     }
 
     @Override
-    public SendMessage execute() {
+    public List<SendMessage> execute() {
         SendMessage response = new SendMessage();
         response.setChatId(chatId);
 
@@ -90,7 +74,7 @@ public class NewRequestCommand implements CommandWithArguments {
             localDate = LocalDate.parse(arguments.get(3), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         } catch (DateTimeParseException e) {
             response.setText("Вы неправильно ввели дату, создайте заявку заново");
-            return response;
+            return Collections.singletonList(response);
         }
         Order order = orderService.createOrder(
                 chatId,
@@ -99,6 +83,7 @@ public class NewRequestCommand implements CommandWithArguments {
                 arguments.get(2),
                 localDate
         );
+
         response.setText("Заявка успешно создана со следующими данными! \n" +
                 "Твой логин: " +
                 order.getPeer().getLogin() + "\n" +
@@ -113,6 +98,6 @@ public class NewRequestCommand implements CommandWithArguments {
                 "Дата посещения: " +
                 order.getStartTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
         );
-        return response;
+        return Collections.singletonList(response);
     }
 }
