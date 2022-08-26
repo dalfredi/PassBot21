@@ -10,12 +10,13 @@ import java.util.Map;
 
 @Component
 public class CommandsFactory {
-    public static final String HELP_TEXT = "Этот бот поможет вам провести гостей в кампус Школы 21\n" +
-            "/start - запустить бота и ввести ник в Интре\n" +
+    public static final String HELP_TEXT =
+            "Этот бот поможет вам провести гостей в кампус Школы 21\n" +
+            "/start - запустить бота и авторизоваться\n" +
             "/register - ввести свои ФИО\n" +
             "/new - создать новую заявку\n" +
             "/list - показать все ваши заявки\n" +
-            "/listall - показать все активные заявки (доступно только сотрудникам школы)\n" +
+            "/list_active - показать все активные заявки (ADM)\n" +
             "/help - показать все доступные команды";
     private final Map<String, Command> commandNameMapping = new HashMap<>();
     private final Map<String, Command> commandNameMapping2 = new HashMap<>();

@@ -13,6 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Component
 public class CallbackHandler {
@@ -40,7 +41,7 @@ public class CallbackHandler {
         }
     }
 
-    public SendMessage handle(CallbackQuery callbackQuery) {
+    public List<SendMessage> handle(CallbackQuery callbackQuery) {
         String data = callbackQuery.getData();
         long chatId = callbackQuery.getMessage().getChatId();
         long messageId = callbackQuery.getMessage().getMessageId();
@@ -51,7 +52,6 @@ public class CallbackHandler {
         else if (data.startsWith(DECLINE_PREFIX)) {
             declineOrder(messageId, chatId, data);
         }
-
         return null;
     }
 

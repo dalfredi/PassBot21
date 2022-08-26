@@ -49,10 +49,10 @@ public class PassBot extends TelegramLongPollingSessionBot {
             Message message = update.getMessage();
             responses = manageMessage(message, session);
         }
-//        else if (update.hasCallbackQuery()) {
-//            CallbackQuery callbackQuery = update.getCallbackQuery();
-//            responses = manageCallback(callbackQuery);
-//        }
+        else if (update.hasCallbackQuery()) {
+            CallbackQuery callbackQuery = update.getCallbackQuery();
+            responses = manageCallback(callbackQuery);
+        }
         if (responses != null && !responses.isEmpty()) {
             for (SendMessage response : responses)
                 if (response != null)
@@ -60,11 +60,10 @@ public class PassBot extends TelegramLongPollingSessionBot {
         }
     }
 
-    private SendMessage manageCallback(CallbackQuery callbackQuery) {
+    private List<SendMessage> manageCallback(CallbackQuery callbackQuery) {
         return callbackHandler.handle(callbackQuery);
     }
 
-//    @SneakyThrows
     private List<SendMessage> manageMessage(Message message, Session session) {
         Command command = (Command) session.getAttribute("command");
         List<SendMessage> responses = new LinkedList<>();
@@ -72,23 +71,10 @@ public class PassBot extends TelegramLongPollingSessionBot {
         if (command == null) {
             command = commandsFactory.getCommandByName(message.getChatId(), message.getText());
             command.onCreate();
-//            if (command.isError()) {
-//                response = new SendMessage();
-//                response.setChatId(command.getChatId());
-//                response.setText(command.getResponseText());
-//                return response;
-//            }
             session.setAttribute("command", command);
         }
         else {
             command.addArgument(message.getText());
-//            if (command.isError()) {
-//                response = new SendMessage();
-//                response.setChatId(command.getChatId());
-//                response.setText(command.getResponseText());
-//                session.setAttribute("command", null);
-//                return response;
-//            }
         }
         if (command.isReady()) {
             responses = command.execute();

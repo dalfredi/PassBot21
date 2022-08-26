@@ -3,7 +3,6 @@ package edu.school21.passbot.commands;
 import edu.school21.passbot.commandsfactory.Command;
 import edu.school21.passbot.commandsfactory.CommandsFactory;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -13,17 +12,11 @@ import java.util.List;
 
 @Component
 @Scope("prototype")
-@NoArgsConstructor
 public class ShowHelpCommand extends Command {
     @Getter
-    private String name = "/help";
+    private final String name = "/help";
     @Getter
-    private String name2 = "Помощь";
-
-
-    public ShowHelpCommand(Long chatId) {
-        super(chatId);
-    }
+    private final String name2 = "Помощь";
 
     @Override
     public List<SendMessage> execute() {
