@@ -1,15 +1,15 @@
 package edu.school21.passbot.bot;
 
 import edu.school21.passbot.admin.CallbackHandler;
-import edu.school21.passbot.commandsfactory.CommandsFactory;
+import edu.school21.passbot.cache.UserDataCache;
 import edu.school21.passbot.commandsfactory.Command;
+import edu.school21.passbot.commandsfactory.CommandsFactory;
 import edu.school21.passbot.config.PassBotConfig;
 import lombok.SneakyThrows;
-import org.apache.shiro.session.InvalidSessionException;
-import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -18,36 +18,33 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.session.TelegramLongPollingSessionBot;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 @Component
-public class PassBot extends TelegramLongPollingSessionBot {
+public class PassBot extends TelegramLongPollingBot {
     private static final Logger logger = LoggerFactory.getLogger(PassBot.class);
     private final PassBotConfig config;
     private final CommandsFactory commandsFactory;
     private final CallbackHandler callbackHandler;
-    public PassBot(PassBotConfig config, CommandsFactory commandsFactory, CallbackHandler callbackHandler) {
+    private final UserDataCache usersDataCache;
+    public PassBot(PassBotConfig config, CommandsFactory commandsFactory,
+                   CallbackHandler callbackHandler, UserDataCache usersDataCache) {
         this.config = config;
         this.commandsFactory = commandsFactory;
         this.callbackHandler = callbackHandler;
+        this.usersDataCache = usersDataCache;
         callbackHandler.setPassBot(this);
     }
 
     @Override
-    public void onUpdateReceived(Update update, Optional<Session> optional) {
-        if (!optional.isPresent())
-            throw new InvalidSessionException("Session not found");
-
-        Session session = optional.get();
+    public void onUpdateReceived(Update update) {
         List<SendMessage> responses = null;
         if (update.hasMessage() && update.getMessage().hasText()) {
             Message message = update.getMessage();
-            responses = manageMessage(message, session);
+            responses = manageMessage(message);
         }
         else if (update.hasCallbackQuery()) {
             CallbackQuery callbackQuery = update.getCallbackQuery();
@@ -64,21 +61,22 @@ public class PassBot extends TelegramLongPollingSessionBot {
         return callbackHandler.handle(callbackQuery);
     }
 
-    private List<SendMessage> manageMessage(Message message, Session session) {
-        Command command = (Command) session.getAttribute("command");
+    private List<SendMessage> manageMessage(Message message) {
+        Long chatId = message.getChatId();
+        Command command = usersDataCache.getCommand(chatId);
         List<SendMessage> responses = new LinkedList<>();
 
         if (command == null) {
             command = commandsFactory.getCommandByName(message.getChatId(), message.getText());
             command.onCreate();
-            session.setAttribute("command", command);
+            usersDataCache.setCommand(chatId, command);
         }
         else {
             command.addArgument(message.getText());
         }
         if (command.isReady()) {
             responses = command.execute();
-            session.setAttribute("command", null);
+            usersDataCache.clearCommand(chatId);
         } else
             responses.add(command.getNextPrompt());
         return responses;
