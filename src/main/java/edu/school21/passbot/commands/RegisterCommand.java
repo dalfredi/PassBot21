@@ -3,6 +3,7 @@ package edu.school21.passbot.commands;
 import edu.school21.passbot.commandsfactory.Command;
 import edu.school21.passbot.models.User;
 import edu.school21.passbot.service.UserService;
+import edu.school21.passbot.telegramview.Renderer;
 import lombok.Getter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -37,21 +38,18 @@ public class RegisterCommand extends Command {
 
     @Override
     public List<SendMessage> execute() {
-        SendMessage response = new SendMessage();
-        response.setChatId(chatId);
-
-
         User user = userService.getByChatId(chatId);
+
         user.setRegistered(true);
         user.setSurname(arguments.get(0));
         user.setName(arguments.get(1));
         user.setPatronymic(arguments.get(2));
         userService.updateUser(user);
-        response.setText("Отлично! Вы успешно зарегистрировались со следующими данными:\n" +
+
+        return Renderer.plainMessage(chatId,
+                "Отлично! Вы успешно обновили свои данные:\n" +
                 "логин: " + user.getLogin() + "\n" +
                 "роль: " + user.getRole() + "\n" +
                 "ФИО: " + user.getSurname() + " " + user.getName() + " " + user.getPatronymic() + "\n");
-
-        return Collections.singletonList(response);
     }
 }

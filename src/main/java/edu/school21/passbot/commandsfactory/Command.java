@@ -3,6 +3,7 @@ package edu.school21.passbot.commandsfactory;
 import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.Map;
 //@Scope("prototype")
 @NoArgsConstructor
 public abstract class Command {
+    @NotNull
     protected Long chatId;
     protected Integer maxArgs = 0;
     protected final Map<Integer, String> arguments = new HashMap<>();

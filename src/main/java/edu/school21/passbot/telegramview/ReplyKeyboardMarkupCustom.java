@@ -1,5 +1,6 @@
-package edu.school21.passbot.commands;
+package edu.school21.passbot.telegramview;
 
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -10,9 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@NoArgsConstructor
 public class ReplyKeyboardMarkupCustom {
-    public ReplyKeyboardMarkupCustom() {
-    }
 
     private List<KeyboardRow> getUserDefaultKeyboard(SendMessage sendMessage, ReplyKeyboardMarkup replyKeyboardMarkup) {
         // Create a list of keyboard rows
@@ -80,7 +80,6 @@ public class ReplyKeyboardMarkupCustom {
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboard(false);
-        System.out.println("Текст сообщения" + sendMessage.getText());
 
         // Create a list of keyboard rows
         if (status.equals("ADMIN"))

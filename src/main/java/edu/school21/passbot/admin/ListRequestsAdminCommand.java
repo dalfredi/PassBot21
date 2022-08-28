@@ -5,16 +5,12 @@ import edu.school21.passbot.models.Order;
 import edu.school21.passbot.models.User;
 import edu.school21.passbot.service.OrderService;
 import edu.school21.passbot.service.UserService;
+import edu.school21.passbot.telegramview.Renderer;
 import lombok.Getter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 @Component
@@ -47,38 +43,12 @@ public class ListRequestsAdminCommand extends Command {
 
     @Override
     public List<SendMessage> execute() {
-        User admin = userService.getByChatId(chatId);
         List<Order> orders = orderService.getAllActive();
 
         if (orders.size() == 0) {
-            SendMessage response = new SendMessage();
-            response.setChatId(chatId);
-            response.setText("Сейчас активных заявок нет");
-            return Collections.singletonList(response);
+            return Renderer.plainMessage(chatId, "Сейчас активных заявок нет");
         }
-
-        List<SendMessage> responseList = new LinkedList<>();
-        for (Order order : orders) {
-            SendMessage response = new SendMessage();
-            response.setChatId(chatId);
-            response.enableMarkdown(true);
-            response.setReplyMarkup(getInlineKeyboard(order.getId()));
-            response.setText(order.toMarkdownPrettyString());
-            responseList.add(response);
-        }
-        return responseList;
+        return Renderer.toAdminOrderCards(chatId, orders);
     }
 
-    private ReplyKeyboard getInlineKeyboard(Long orderId) {
-        return InlineKeyboardMarkup.builder()
-                .keyboardRow(Collections.singletonList((InlineKeyboardButton.builder()
-                        .text("Одобрить")
-                        .callbackData("approve_" + orderId)
-                        .build())))
-                .keyboardRow(Collections.singletonList(InlineKeyboardButton.builder()
-                        .text("Отклонить")
-                        .callbackData("decline_" + orderId)
-                        .build()))
-                .build();
-    }
 }

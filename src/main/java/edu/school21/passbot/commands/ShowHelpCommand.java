@@ -2,12 +2,12 @@ package edu.school21.passbot.commands;
 
 import edu.school21.passbot.commandsfactory.Command;
 import edu.school21.passbot.commandsfactory.CommandsFactory;
+import edu.school21.passbot.telegramview.Renderer;
 import lombok.Getter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -20,9 +20,6 @@ public class ShowHelpCommand extends Command {
 
     @Override
     public List<SendMessage> execute() {
-        SendMessage response = new SendMessage();
-        response.setChatId(chatId);
-        response.setText(CommandsFactory.HELP_TEXT);
-        return Collections.singletonList(response);
+        return Renderer.plainMessage(chatId, CommandsFactory.HELP_TEXT);
     }
 }

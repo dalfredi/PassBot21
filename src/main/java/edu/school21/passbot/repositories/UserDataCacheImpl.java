@@ -1,4 +1,4 @@
-package edu.school21.passbot.cache;
+package edu.school21.passbot.repositories;
 
 import edu.school21.passbot.commandsfactory.Command;
 import org.springframework.stereotype.Repository;

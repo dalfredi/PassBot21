@@ -5,6 +5,7 @@ import edu.school21.passbot.models.Order;
 import edu.school21.passbot.models.User;
 import edu.school21.passbot.service.OrderService;
 import edu.school21.passbot.service.UserService;
+import edu.school21.passbot.telegramview.Renderer;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.annotation.Scope;
@@ -16,6 +17,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 @Scope("prototype")
@@ -57,7 +60,7 @@ public class NewRequestCommand extends Command {
             try {
                 LocalDate.parse(argument, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
             } catch (DateTimeParseException e) {
-                setError(" - неправильная дата, попробуйте создать заявку заново командой /new");
+                setError(argument + " - неправильная дата, попробуйте создать заявку заново командой /new");
                 return;
             }
         }
@@ -66,15 +69,11 @@ public class NewRequestCommand extends Command {
 
     @Override
     public List<SendMessage> execute() {
-        SendMessage response = new SendMessage();
-        response.setChatId(chatId);
-
         LocalDate localDate;
         try {
             localDate = LocalDate.parse(arguments.get(3), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         } catch (DateTimeParseException e) {
-            response.setText("Вы неправильно ввели дату, создайте заявку заново");
-            return Collections.singletonList(response);
+            return Renderer.plainMessage(chatId, "Вы неправильно ввели дату, создайте заявку заново");
         }
         Order order = orderService.createOrder(
                 chatId,
@@ -83,21 +82,9 @@ public class NewRequestCommand extends Command {
                 arguments.get(2),
                 localDate
         );
-
-        response.setText("Заявка успешно создана со следующими данными! \n" +
-                "Твой логин: " +
-                order.getPeer().getLogin() + "\n" +
-                "Твои ФИО: " +
-                order.getPeer().getSurname() + " " +
-                order.getPeer().getName() + " " +
-                order.getPeer().getPatronymic() + "\n" +
-                "ФИО Гостя: " +
-                order.getGuest().getSurname() + " " +
-                order.getGuest().getName() + " " +
-                order.getGuest().getPatronymic() + "\n" +
-                "Дата посещения: " +
-                order.getStartTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
-        );
-        return Collections.singletonList(response);
+        return Stream.concat(
+                Renderer.plainMessage(chatId, "Заявка успешно создана!\n").stream(),
+                Renderer.toUserOrderCards(chatId, Collections.singletonList(order)).stream()
+        ).collect(Collectors.toList());
     }
 }

@@ -1,7 +1,7 @@
 package edu.school21.passbot.bot;
 
 import edu.school21.passbot.admin.CallbackHandler;
-import edu.school21.passbot.cache.UserDataCache;
+import edu.school21.passbot.repositories.UserDataCache;
 import edu.school21.passbot.commandsfactory.Command;
 import edu.school21.passbot.commandsfactory.CommandsFactory;
 import edu.school21.passbot.config.PassBotConfig;

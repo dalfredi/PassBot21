@@ -5,12 +5,12 @@ import edu.school21.passbot.models.Order;
 import edu.school21.passbot.models.User;
 import edu.school21.passbot.service.OrderService;
 import edu.school21.passbot.service.UserService;
+import edu.school21.passbot.telegramview.Renderer;
 import lombok.Getter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -39,23 +39,11 @@ public class ListRequestsCommand extends Command {
 
     @Override
     public List<SendMessage> execute() {
-        SendMessage response = new SendMessage();
-        response.setChatId(chatId);
-
         User user = userService.getByChatId(chatId);
         List<Order> orders = orderService.getAllByUserId(user);
-        if (orders.size() == 0) {
-            response.setText("Сейчас активных заявок нет");
-            return Collections.singletonList(response);
+        if (orders.isEmpty()) {
+            return Renderer.plainMessage(chatId, "Сейчас активных заявок нет");
         }
-
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Order order : orders) {
-            stringBuilder.append(order.toMarkdownPrettyString()).append("\n");
-        }
-
-        response.setText(stringBuilder.toString());
-        response.enableMarkdown(true);
-        return Collections.singletonList(response);
+        return Renderer.toUserOrderCards(chatId, orders);
     }
 }
