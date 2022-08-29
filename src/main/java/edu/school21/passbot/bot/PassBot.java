@@ -1,10 +1,10 @@
 package edu.school21.passbot.bot;
 
 import edu.school21.passbot.admin.CallbackHandler;
-import edu.school21.passbot.repositories.UserDataCache;
 import edu.school21.passbot.commandsfactory.Command;
 import edu.school21.passbot.commandsfactory.CommandsFactory;
 import edu.school21.passbot.config.PassBotConfig;
+import edu.school21.passbot.repositories.UserDataCache;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,6 @@ import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScope
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Component
@@ -63,24 +62,31 @@ public class PassBot extends TelegramLongPollingBot {
 
     private List<SendMessage> manageMessage(Message message) {
         Long chatId = message.getChatId();
+        String text = message.getText();
         Command command = usersDataCache.getCommand(chatId);
-        List<SendMessage> responses = new LinkedList<>();
+        List<SendMessage> response;
 
         if (command == null) {
-            command = commandsFactory.getCommandByName(message.getChatId(), message.getText());
-            command.onCreate();
+            command = commandsFactory.getCommandByName(chatId, text);
+            command.init();
+            if (command.isError())
+                return command.getErrorMessage();
             usersDataCache.setCommand(chatId, command);
         }
         else {
-            command.addArgument(message.getText());
+            command.validateArgument(text);
+            if (command.isError())
+                return command.getErrorMessage();
+            command.addArgument(text);
         }
         if (command.isReady()) {
-            responses = command.execute();
+            response = command.execute();
             usersDataCache.clearCommand(chatId);
         } else
-            responses.add(command.getNextPrompt());
-        return responses;
+            response = command.getNextPrompt();
+        return response;
     }
+
     public void sendMessage(SendMessage message) {
         try {
             execute(message);

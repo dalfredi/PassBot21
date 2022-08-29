@@ -1,8 +1,10 @@
 package edu.school21.passbot.commands;
 
 import edu.school21.passbot.commandsfactory.Command;
+import edu.school21.passbot.utils.Validators;
 import edu.school21.passbot.models.Order;
 import edu.school21.passbot.models.User;
+import edu.school21.passbot.utils.ParseUtils;
 import edu.school21.passbot.service.OrderService;
 import edu.school21.passbot.service.UserService;
 import edu.school21.passbot.telegramview.Renderer;
@@ -13,8 +15,6 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,15 +35,30 @@ public class NewRequestCommand extends Command {
     public NewRequestCommand(OrderService orderService, UserService userService) {
         this.userService = userService;
         this.orderService = orderService;
-        maxArgs = 4;
-        prompts.put(0, "Чтобы создать новую заявку, введите фамилию гостя");
-        prompts.put(1, "Теперь введите имя гостя");
-        prompts.put(2, "Введите отчество гостя");
-        prompts.put(3, "Введите дату в формате ДД.ММ.ГГГГ");
+        initArgument(
+                "Чтобы создать новую заявку, введите фамилию гостя",
+                Validators::isCorrectName,
+                "Вы ввели некорректную фамилию! Попробуйте ещё раз"
+        );
+        initArgument(
+                "Теперь введите имя гостя",
+                Validators::isCorrectName,
+                "Вы ввели некрректное имя! Попробуйте ещё раз"
+        );
+        initArgument(
+                "Введите отчество гостя",
+                Validators::isCorrectName,
+                "Вы ввели некорректное отчество! Попробуйте ещё раз"
+        );
+        initArgument(
+                "Введите дату в формате ДД.MM.ГГГГ",
+                Validators::isCorrectDate,
+                "Неверная дата, попробуйте ещё раз"
+        );
     }
 
     @Override
-    public void onCreate() {
+    public void init() {
         User user = userService.getByChatId(chatId);
         if (user == null) {
             setError("Сначала вам нужно представиться /start");
@@ -55,26 +70,9 @@ public class NewRequestCommand extends Command {
         }
     }
 
-    public void addArgument(String argument) {
-        if (currentStep == 4) {
-            try {
-                LocalDate.parse(argument, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-            } catch (DateTimeParseException e) {
-                setError(argument + " - неправильная дата, попробуйте создать заявку заново командой /new");
-                return;
-            }
-        }
-        super.addArgument(argument);
-    }
-
     @Override
     public List<SendMessage> execute() {
-        LocalDate localDate;
-        try {
-            localDate = LocalDate.parse(arguments.get(3), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        } catch (DateTimeParseException e) {
-            return Renderer.plainMessage(chatId, "Вы неправильно ввели дату, создайте заявку заново");
-        }
+        LocalDate localDate = ParseUtils.parseDate(arguments.get(3));
         Order order = orderService.createOrder(
                 chatId,
                 arguments.get(0),

@@ -29,7 +29,7 @@ public class ListRequestsAdminCommand extends Command {
     }
 
     @Override
-    public void onCreate() {
+    public void init() {
         User user = userService.getByChatId(chatId);
         if (user == null) {
             setError("Представьтесь, чтобы выполнить эту команду /start");

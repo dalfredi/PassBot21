@@ -4,6 +4,7 @@ import edu.school21.passbot.commandsfactory.Command;
 import edu.school21.passbot.models.User;
 import edu.school21.passbot.service.UserService;
 import edu.school21.passbot.telegramview.Renderer;
+import edu.school21.passbot.utils.Validators;
 import lombok.Getter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -22,14 +23,25 @@ public class RegisterCommand extends Command {
 
     public RegisterCommand(UserService userService) {
         this.userService = userService;
-        maxArgs = 3;
-        prompts.put(0, "Введите вашу фамилию");
-        prompts.put(1, "Введите ваше имя");
-        prompts.put(2, "Введите ваше отчество");
+        initArgument(
+                "Введите свою фамилию",
+                Validators::isCorrectName,
+                "Вы ввели некорректную фамилию! Попробуйте ещё раз"
+        );
+        initArgument(
+                "Введите своё имя",
+                Validators::isCorrectName,
+                "Вы ввели некрректное имя! Попробуйте ещё раз"
+        );
+        initArgument(
+                "Введите отчество",
+                Validators::isCorrectName,
+                "Вы ввели некорректное отчество! Попробуйте ещё раз"
+        );
     }
 
     @Override
-    public void onCreate() {
+    public void init() {
         User user = userService.getByChatId(chatId);
         if (user == null) {
             setError("Сначала вам нужно представиться: /start");
