@@ -1,6 +1,6 @@
 package edu.school21.passbot.bot;
 
-import edu.school21.passbot.admin.CallbackHandler;
+import edu.school21.passbot.callbacks.CallbackQueryFacade;
 import edu.school21.passbot.commandsfactory.Command;
 import edu.school21.passbot.commandsfactory.CommandsFactory;
 import edu.school21.passbot.config.PassBotConfig;
@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -19,6 +20,7 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,15 +29,15 @@ public class PassBot extends TelegramLongPollingBot {
     private static final Logger logger = LoggerFactory.getLogger(PassBot.class);
     private final PassBotConfig config;
     private final CommandsFactory commandsFactory;
-    private final CallbackHandler callbackHandler;
+    private final CallbackQueryFacade callbackHandlerFacade;
     private final UserDataCache usersDataCache;
     public PassBot(PassBotConfig config, CommandsFactory commandsFactory,
-                   CallbackHandler callbackHandler, UserDataCache usersDataCache) {
+                   CallbackQueryFacade callbackHandlerFacade, UserDataCache usersDataCache) {
         this.config = config;
         this.commandsFactory = commandsFactory;
-        this.callbackHandler = callbackHandler;
+        this.callbackHandlerFacade = callbackHandlerFacade;
         this.usersDataCache = usersDataCache;
-        callbackHandler.setPassBot(this);
+        callbackHandlerFacade.setSender(this::sendUpdate);
     }
 
     @Override
@@ -57,7 +59,7 @@ public class PassBot extends TelegramLongPollingBot {
     }
 
     private List<SendMessage> manageCallback(CallbackQuery callbackQuery) {
-        return callbackHandler.handle(callbackQuery);
+        return callbackHandlerFacade.handle(callbackQuery);
     }
 
     private List<SendMessage> manageMessage(Message message) {
@@ -93,6 +95,17 @@ public class PassBot extends TelegramLongPollingBot {
             logger.info("Message sent \"{}\" ", message.toString());
         } catch (TelegramApiException e) {
             logger.error("Failed to send message \"{}\"", message.toString());
+            e.printStackTrace();
+        }
+    }
+
+    public void sendUpdate(BotApiMethod<Serializable> update) {
+        try {
+            execute(update);
+            logger.info("Update sent \"{}\" ", update.toString());
+        } catch (TelegramApiException e) {
+            logger.error("Failed to send update \"{}\"", update.toString());
+            e.printStackTrace();
         }
     }
 

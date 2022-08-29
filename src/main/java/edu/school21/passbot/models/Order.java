@@ -37,6 +37,20 @@ public class Order {
     @ToString.Exclude
     private User admin;
 
+
+    public enum OrderStatus {
+        PROCESSING("На рассмотрении"),
+        APPROVED("Одобрена"),
+        DECLINED("Отклонена");
+
+        @Getter
+        private String text;
+        OrderStatus(String text) {
+            this.text = text;
+        }
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

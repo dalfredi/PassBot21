@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-//@Component
-//@Scope("prototype")
 @NoArgsConstructor
 public abstract class Command {
     protected final Map<Integer, String> arguments = new HashMap<>();
