@@ -41,7 +41,7 @@ public class Renderer {
             SendMessage response = new SendMessage();
             response.setChatId(chatId);
             response.setText(order.toMarkdownPrettyString());
-            if (order.getStatus().equals(Order.OrderStatus.PROCESSING.toString()))
+            if (order.getStatus().equals(Order.OrderStatus.PROCESSING.getText()))
                 response.setReplyMarkup(InlineKeyboards.orderCardUser(order.getId()));
             response.enableMarkdown(true);
             sendMessageList.add(response);
@@ -74,7 +74,7 @@ public class Renderer {
                              : DECLINE_POSTFIX);
         EditMessageText editMessage = new EditMessageText();
         editMessage.setChatId(chatId);
-        editMessage.setMessageId(Math.toIntExact(messageId));
+        editMessage.setMessageId(messageId);
         editMessage.enableMarkdown(true);
         editMessage.setText(order.toMarkdownPrettyString()
                 .replaceFirst(status, emojiStatus)
