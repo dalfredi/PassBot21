@@ -6,6 +6,8 @@ target/
 .idea/
 src/main/resources/secret.properties
 log/
+.mvn/wrapper/maven-wrapper.jar
+
 ### STS ###
 .apt_generated
 .classpath
