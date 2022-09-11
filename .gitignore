@@ -4,7 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .idea/
-
+src/main/resources/secret.properties
+log/
 ### STS ###
 .apt_generated
 .classpath
