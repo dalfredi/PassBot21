@@ -1,5 +1,7 @@
 package edu.school21.passbot.telegramview;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -7,14 +9,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Component
 @NoArgsConstructor
 public class ReplyKeyboardMarkupCustom {
 
-    private List<KeyboardRow> getUserDefaultKeyboard(SendMessage sendMessage, ReplyKeyboardMarkup replyKeyboardMarkup) {
+    private List<KeyboardRow> getUserDefaultKeyboard(SendMessage sendMessage,
+                                                     ReplyKeyboardMarkup replyKeyboardMarkup) {
         // Create a list of keyboard rows
         List<KeyboardRow> keyboard = new ArrayList<>();
 
@@ -41,7 +41,8 @@ public class ReplyKeyboardMarkupCustom {
         return keyboard;
     }
 
-    private List<KeyboardRow> getAdminDefaultKeyboard(SendMessage sendMessage, ReplyKeyboardMarkup replyKeyboardMarkup) {
+    private List<KeyboardRow> getAdminDefaultKeyboard(SendMessage sendMessage,
+                                                      ReplyKeyboardMarkup replyKeyboardMarkup) {
         // Create a list of keyboard rows
         List<KeyboardRow> keyboard = new ArrayList<>();
 
@@ -73,7 +74,8 @@ public class ReplyKeyboardMarkupCustom {
         return keyboard;
     }
 
-    public synchronized void setButtons(SendMessage sendMessage, String status)  {
+    public synchronized void setButtons(SendMessage sendMessage,
+                                        String status) {
         // Create a keyboard
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         sendMessage.setReplyMarkup(replyKeyboardMarkup);
@@ -82,9 +84,10 @@ public class ReplyKeyboardMarkupCustom {
         replyKeyboardMarkup.setOneTimeKeyboard(false);
 
         // Create a list of keyboard rows
-        if (status.equals("ADMIN"))
+        if (status.equals("ADMIN")) {
             this.getAdminDefaultKeyboard(sendMessage, replyKeyboardMarkup);
-        else if (status.equals("USER"))
+        } else if (status.equals("USER")) {
             this.getUserDefaultKeyboard(sendMessage, replyKeyboardMarkup);
+        }
     }
 }

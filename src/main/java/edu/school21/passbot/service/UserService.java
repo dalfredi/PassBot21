@@ -2,22 +2,21 @@ package edu.school21.passbot.service;
 
 import edu.school21.passbot.models.User;
 import edu.school21.passbot.repositories.UsersRepository;
+import java.util.Optional;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
 
-
-//@RequiredArgsConstructor
 @Component
 public class UserService {
 
     private final UsersRepository usersRepository;
+
     public UserService(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
 
     public User createUser(
-            Long chatId, String name, String surname, String patronymic
+        Long chatId, String name, String surname, String patronymic
     ) {
         User user = new User();
 
@@ -45,6 +44,6 @@ public class UserService {
     }
 
     public void saveUser(User user) {
-       usersRepository.save(user);
+        usersRepository.save(user);
     }
 }

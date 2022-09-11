@@ -4,25 +4,26 @@ import edu.school21.passbot.models.Order;
 import edu.school21.passbot.models.User;
 import edu.school21.passbot.repositories.OrdersRepository;
 import edu.school21.passbot.repositories.UsersRepository;
-import org.apache.shiro.session.InvalidSessionException;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import org.apache.shiro.session.InvalidSessionException;
+import org.springframework.stereotype.Service;
 
 @Service
 public class OrderService {
 
     private final OrdersRepository ordersRepository;
     private final UsersRepository usersRepository;
-    public OrderService(OrdersRepository ordersRepository, UsersRepository usersRepository) {
+
+    public OrderService(OrdersRepository ordersRepository,
+                        UsersRepository usersRepository) {
         this.ordersRepository = ordersRepository;
         this.usersRepository = usersRepository;
     }
 
-//    TODO fetch actual start and end time from some config
+    //    TODO fetch actual start and end time from some config
     public Order createOrder(Long chatId,
                              String guestSurname,
                              String guestName,
@@ -36,8 +37,10 @@ public class OrderService {
         usersRepository.save(guest);
 
         User peer = usersRepository.getUserByChatId(chatId).orElse(null);
-        if (peer == null)
-            throw new InvalidSessionException("Session does not contain chatid");
+        if (peer == null) {
+            throw new InvalidSessionException(
+                "Session does not contain chatid");
+        }
 
         Order order = new Order();
         order.setGuest(guest);
@@ -52,7 +55,8 @@ public class OrderService {
     }
 
     public List<Order> getAllActiveForCampus(String campus) {
-        return ordersRepository.findAllByStatusAndCampus("На рассмотрении", campus);
+        return ordersRepository.findAllByStatusAndCampus("На рассмотрении",
+            campus);
     }
 
     public List<Order> getAllActive() {

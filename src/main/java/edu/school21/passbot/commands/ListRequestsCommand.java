@@ -6,12 +6,11 @@ import edu.school21.passbot.models.User;
 import edu.school21.passbot.service.OrderService;
 import edu.school21.passbot.service.UserService;
 import edu.school21.passbot.telegramview.Renderer;
+import java.util.List;
 import lombok.Getter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-
-import java.util.List;
 
 @Component
 @Scope("prototype")
@@ -23,7 +22,8 @@ public class ListRequestsCommand extends Command {
     private final UserService userService;
     private final OrderService orderService;
 
-    public ListRequestsCommand(UserService userService, OrderService orderService) {
+    public ListRequestsCommand(UserService userService,
+                               OrderService orderService) {
         this.userService = userService;
         this.orderService = orderService;
     }
@@ -33,7 +33,6 @@ public class ListRequestsCommand extends Command {
         User user = userService.getByChatId(chatId);
         if (user == null) {
             setError("Представьтесь, чтобы выполнить эту команду /start");
-            return;
         }
     }
 

@@ -13,9 +13,9 @@ public class PassBotConfig {
     @Value("${bot.token}")
     String token;
 
-    @Value("${user.oauth.clientId}")
+    @Value("${intra.oauth.clientId}")
     String credentialId;
 
-    @Value("${user.oauth.clientSecret}")
+    @Value("${intra.oauth.clientSecret}")
     String credentialSecret;
 }

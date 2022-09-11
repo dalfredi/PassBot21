@@ -1,22 +1,22 @@
 package edu.school21.passbot.commandsfactory;
 
 import edu.school21.passbot.telegramview.Renderer;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import javax.validation.constraints.NotNull;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
-
 @NoArgsConstructor
 public abstract class Command {
     protected final Map<Integer, String> arguments = new HashMap<>();
     protected final Map<Integer, String> prompts = new HashMap<>();
-    protected final Map<Integer, Predicate<String>> validators = new HashMap<>();
+    protected final Map<Integer, Predicate<String>> validators =
+        new HashMap<>();
     protected final Map<Integer, String> errorMessages = new HashMap<>();
     @NotNull
     @Setter
@@ -37,7 +37,8 @@ public abstract class Command {
      * and before command starts getting any argument from user.
      * You can override this method to do some pre-execute checks.
      * For example, you can check if user with given chatId has rights to execute your command
-     * and setError if not.*/
+     * and setError if not.
+     */
     public void init() {
     }
 
@@ -45,11 +46,13 @@ public abstract class Command {
      * Initialization of command argument.
      * Should be called in constructor or init() method,
      * before the command starts accepting input from user.
-     * @param prompt the message prompting the user to enter an argument
-     * @param validator a Predicate which checks a user input string
-     * @param errorMessage the message which user gets if validation of argument fails*/
+     *
+     * @param prompt       the message prompting the user to enter an argument
+     * @param validator    a Predicate which checks a user input string
+     * @param errorMessage the message which user gets if validation of argument fails
+     */
     protected void initArgument(
-            String prompt, Predicate<String> validator, String errorMessage) {
+        String prompt, Predicate<String> validator, String errorMessage) {
         prompts.put(maxArgs, prompt);
         validators.put(maxArgs, validator);
         errorMessages.put(maxArgs, errorMessage);
@@ -64,8 +67,9 @@ public abstract class Command {
     public void validateArgument(@NotNull String argument) {
         error = false;
         Predicate<String> validator = validators.get(currentStep);
-        if (validator == null)
+        if (validator == null) {
             return;
+        }
         if (!validator.test(argument)) {
             setError(errorMessages.get(currentStep));
         }
@@ -94,14 +98,19 @@ public abstract class Command {
      * its arguments from user
      * Method should produce the list of SendMessages which will be sent to user
      * as a response of executing the command
-     * @return messages which user gets after executing the command*/
+     *
+     * @return messages which user gets after executing the command
+     */
     abstract public List<SendMessage> execute();
+
     /**
      * Here you should set up a name of you command.
-     * For example /start or /help */
+     * For example /start or /help
+     */
     abstract public String getName();
 
     /**
-     * You can also add a second alias to you command to use it with ReplyKeyboard.*/
+     * You can also add a second alias to you command to use it with ReplyKeyboard.
+     */
     abstract public String getName2();
 }

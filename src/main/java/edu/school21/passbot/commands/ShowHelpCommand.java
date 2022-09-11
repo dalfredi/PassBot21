@@ -3,12 +3,11 @@ package edu.school21.passbot.commands;
 import edu.school21.passbot.commandsfactory.Command;
 import edu.school21.passbot.commandsfactory.CommandsFactory;
 import edu.school21.passbot.telegramview.Renderer;
+import java.util.List;
 import lombok.Getter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-
-import java.util.List;
 
 @Component
 @Scope("prototype")

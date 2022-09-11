@@ -1,27 +1,23 @@
 package edu.school21.passbot.callbacks;
 
 import edu.school21.passbot.models.Order;
-import edu.school21.passbot.service.MailNotificationService;
 import edu.school21.passbot.service.OrderService;
 import edu.school21.passbot.telegramview.Buttons;
 import edu.school21.passbot.telegramview.Renderer;
+import java.io.Serializable;
+import java.util.List;
+import java.util.function.Consumer;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.function.Consumer;
-
 @Component
 public class OrderStatusCallbackHandler implements CallbackQueryHandler {
     private final OrderService orderService;
-    private final MailNotificationService mailNotificationService;
 
-    public OrderStatusCallbackHandler(OrderService orderService, MailNotificationService mailNotificationService) {
+    public OrderStatusCallbackHandler(OrderService orderService) {
         this.orderService = orderService;
-        this.mailNotificationService = mailNotificationService;
     }
 
     @Override
@@ -42,13 +38,4 @@ public class OrderStatusCallbackHandler implements CallbackQueryHandler {
         return Renderer.statusChangedMessage(chatId, order);
     }
 }
-// TODO: уведомление по имейлу
 
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("Ваша заявка №")
-//                .append(orderId).append(" перешла в статус ").append(status)
-//                .append("\r\n").append("--------------").append("\r\n")
-//                .append("C уважением, Администрация Школы 21 города ")
-//                .append(order.getCampus())
-//                .append("\r\n");
-//        mailNotificationService.sendEmail(sb.toString(), "postfedor@gmail.com");

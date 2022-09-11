@@ -5,12 +5,11 @@ import edu.school21.passbot.models.User;
 import edu.school21.passbot.service.UserService;
 import edu.school21.passbot.telegramview.Renderer;
 import edu.school21.passbot.utils.Validators;
+import java.util.List;
 import lombok.Getter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-
-import java.util.*;
 
 @Component
 @Scope("prototype")
@@ -24,19 +23,19 @@ public class RegisterCommand extends Command {
     public RegisterCommand(UserService userService) {
         this.userService = userService;
         initArgument(
-                "Введите свою фамилию",
-                Validators::isCorrectName,
-                "Вы ввели некорректную фамилию! Попробуйте ещё раз"
+            "Введите свою фамилию",
+            Validators::isCorrectName,
+            "Вы ввели некорректную фамилию! Попробуйте ещё раз"
         );
         initArgument(
-                "Введите своё имя",
-                Validators::isCorrectName,
-                "Вы ввели некрректное имя! Попробуйте ещё раз"
+            "Введите своё имя",
+            Validators::isCorrectName,
+            "Вы ввели некрректное имя! Попробуйте ещё раз"
         );
         initArgument(
-                "Введите отчество",
-                Validators::isCorrectName,
-                "Вы ввели некорректное отчество! Попробуйте ещё раз"
+            "Введите отчество",
+            Validators::isCorrectName,
+            "Вы ввели некорректное отчество! Попробуйте ещё раз"
         );
     }
 
@@ -59,9 +58,10 @@ public class RegisterCommand extends Command {
         userService.updateUser(user);
 
         return Renderer.plainMessage(chatId,
-                "Отлично! Вы успешно обновили свои данные:\n" +
+            "Отлично! Вы успешно обновили свои данные:\n" +
                 "логин: " + user.getLogin() + "\n" +
                 "роль: " + user.getRole() + "\n" +
-                "ФИО: " + user.getSurname() + " " + user.getName() + " " + user.getPatronymic() + "\n");
+                "ФИО: " + user.getSurname() + " " + user.getName() + " " +
+                user.getPatronymic() + "\n");
     }
 }
